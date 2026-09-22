@@ -8,6 +8,6 @@ package co.edu.poligran.paradigmas.agenda.modelo;
  *
  * @author salaG201
  */
-public class Cliente {
-    
+public class Cliente extends Persona2 {
+ 
 }
