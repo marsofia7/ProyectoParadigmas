@@ -1,0 +1,58 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package co.edu.poligran.paradigmas.agenda.modelo;
+
+/**
+ *
+ * @author CRISTIAN
+ */
+public class Producto  {
+    private int idProducto;
+    private long precioProducto;
+    private String nombresProducto;
+    private String descripcionProducto;
+
+    public Producto() {
+    }
+
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public long getPrecioProducto() {
+        return precioProducto;
+    }
+
+    public void setPrecioProducto(long precioProducto) {
+        this.precioProducto = precioProducto;
+    }
+
+    public String getNombresProducto() {
+        return nombresProducto;
+    }
+
+    public void setNombresProducto(String nombresProducto) {
+        this.nombresProducto = nombresProducto;
+    }
+
+    public String getDescripcionProducto() {
+        return descripcionProducto;
+    }
+
+    public void setDescripcionProducto(String descripcionProducto) {
+        this.descripcionProducto = descripcionProducto;
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido{" + "idProducto=" + idProducto + ", precioProducto=" + precioProducto + ", nombresProducto=" + nombresProducto + ", descripcionProducto=" + descripcionProducto + '}';
+    }
+    
+    
+}
