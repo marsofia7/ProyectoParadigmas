@@ -1,4 +1,4 @@
-package co.edu.poligran.paradigmas.agenda.modelo;
+package co.edu.poligran.paradigmas.restaurante.modelo;
 
 /**
  * Correo electrónico asociado a una persona (idPersona actúa como llave foránea).

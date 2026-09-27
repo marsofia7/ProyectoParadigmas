@@ -1,11 +1,11 @@
-package co.edu.poligran.paradigmas.agenda.negocio;
+package co.edu.poligran.paradigmas.restaurante.negocio;
 
-import co.edu.poligran.paradigmas.agenda.dao.CorreoElectronicoDAO;
-import co.edu.poligran.paradigmas.agenda.dao.PersonaDAO;
-import co.edu.poligran.paradigmas.agenda.dao.TelefonoDAO;
-import co.edu.poligran.paradigmas.agenda.modelo.CorreoElectronico;
-import co.edu.poligran.paradigmas.agenda.modelo.Persona;
-import co.edu.poligran.paradigmas.agenda.modelo.Telefono;
+import co.edu.poligran.paradigmas.restaurante.dao.CorreoElectronicoDAO;
+import co.edu.poligran.paradigmas.restaurante.dao.PersonaDAO;
+import co.edu.poligran.paradigmas.restaurante.dao.TelefonoDAO;
+import co.edu.poligran.paradigmas.restaurante.modelo.CorreoElectronico;
+import co.edu.poligran.paradigmas.restaurante.modelo.Persona;
+import co.edu.poligran.paradigmas.restaurante.modelo.Telefono;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +33,7 @@ import java.util.List;
  * @see TelefonoDAO
  * @see CorreoElectronicoDAO
  */
-public class AgendaManager {
+public class RestauranteManager {
 
     /** Lista materializada de personas (compartida con la clase Agenda). */
     private final List<Persona> personas;
@@ -62,7 +62,7 @@ public class AgendaManager {
      * @param personas lista en memoria donde se guardarán las personas;
      *                 normalmente es la lista declarada en la clase {@code Agenda}
      */
-    public AgendaManager(List<Persona> personas) {
+    public RestauranteManager(List<Persona> personas) {
         this.personas = personas;
         this.telefonos = new ArrayList<>();
         this.correos = new ArrayList<>();

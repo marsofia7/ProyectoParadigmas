@@ -1,4 +1,4 @@
-package co.edu.poligran.paradigmas.agenda;
+package co.edu.poligran.paradigmas.restaurante;
 
 /**
  * Centraliza todos los textos que se muestran en la consola.

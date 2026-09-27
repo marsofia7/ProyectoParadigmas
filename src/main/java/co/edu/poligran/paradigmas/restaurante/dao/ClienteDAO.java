@@ -2,39 +2,39 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package co.edu.poligran.paradigmas.agenda.dao;
+package co.edu.poligran.paradigmas.restaurante.dao;
 
-import co.edu.poligran.paradigmas.agenda.modelo.Pedido;
+import co.edu.poligran.paradigmas.restaurante.modelo.Persona2;
 import java.util.List;
 
 /**
  *
- * @author cdapalaciosa
+ * @author salaG201
  */
-public class PedidoDAO implements ICrudDAO<Pedido> {
+public class ClienteDAO implements ICrudDAO<Persona2>  {
 
     @Override
-    public Pedido crear(List<Pedido> lista, Pedido Pedido) {
+    public Persona2 crear(List<Persona2> lista, Persona2 Persona2) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Pedido actualizar(List<Pedido> lista, Pedido Pedido) {
+    public Persona2 actualizar(List<Persona2> lista, Persona2 Persona2) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public boolean eliminar(List<Pedido> lista, int id) {
+    public boolean eliminar(List<Persona2> lista, int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Pedido buscarPorId(List<Pedido> lista, int id) {
+    public Persona2 buscarPorId(List<Persona2> lista, int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<Pedido> listar(List<Pedido> lista) {
+    public List<Persona2> listar(List<Persona2> lista) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

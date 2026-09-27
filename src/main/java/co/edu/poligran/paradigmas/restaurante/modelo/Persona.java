@@ -1,4 +1,4 @@
-package co.edu.poligran.paradigmas.agenda.modelo;
+package co.edu.poligran.paradigmas.restaurante.modelo;
 
 import java.util.ArrayList;
 import java.util.List;

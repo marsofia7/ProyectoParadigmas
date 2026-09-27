@@ -1,6 +1,6 @@
-package co.edu.poligran.paradigmas.agenda.dao;
+package co.edu.poligran.paradigmas.restaurante.dao;
 
-import co.edu.poligran.paradigmas.agenda.modelo.Persona;
+import co.edu.poligran.paradigmas.restaurante.modelo.Persona;
 import java.util.Collections;
 import java.util.List;
 

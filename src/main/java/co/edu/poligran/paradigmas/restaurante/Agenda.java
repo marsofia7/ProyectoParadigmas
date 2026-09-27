@@ -1,9 +1,9 @@
-package co.edu.poligran.paradigmas.agenda;
+package co.edu.poligran.paradigmas.restaurante;
 
-import co.edu.poligran.paradigmas.agenda.modelo.CorreoElectronico;
-import co.edu.poligran.paradigmas.agenda.modelo.Persona;
-import co.edu.poligran.paradigmas.agenda.modelo.Telefono;
-import co.edu.poligran.paradigmas.agenda.negocio.AgendaManager;
+import co.edu.poligran.paradigmas.restaurante.modelo.CorreoElectronico;
+import co.edu.poligran.paradigmas.restaurante.modelo.Persona;
+import co.edu.poligran.paradigmas.restaurante.modelo.Telefono;
+import co.edu.poligran.paradigmas.restaurante.negocio.RestauranteManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +16,7 @@ public class Agenda {
     /** Lista donde quedan guardadas las personas con sus teléfonos y correos. */
     private static final List<Persona> personas = new ArrayList<>();
 
-    private static final AgendaManager manager = new AgendaManager(personas);
+    private static final RestauranteManager manager = new RestauranteManager(personas);
     private static final Scanner sc = new Scanner(System.in);
 
     private static final String REGEX_TELEFONO = "^[+\\d][\\d\\s-]{6,14}$";

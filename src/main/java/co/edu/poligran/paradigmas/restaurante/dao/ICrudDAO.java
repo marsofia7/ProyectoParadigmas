@@ -1,4 +1,4 @@
-package co.edu.poligran.paradigmas.agenda.dao;
+package co.edu.poligran.paradigmas.restaurante.dao;
 
 import java.util.List;
 

@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package co.edu.poligran.paradigmas.agenda.dao;
+package co.edu.poligran.paradigmas.restaurante.dao;
 
-import co.edu.poligran.paradigmas.agenda.modelo.Cocinero;
+import co.edu.poligran.paradigmas.restaurante.modelo.Cocinero;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,53 +15,53 @@ import java.util.List;
 public class CocineroDAO implements ICrudDAO<Cocinero> {
 
     @Override
-    public Cocinero crear(List<Cocinero> lista, Cocinero objeto) {
-        if (lista == null || objeto == null) {
+    public Cocinero crear(List<Cocinero> lista, Cocinero Cocinero) {
+        if (lista == null || Cocinero == null) {
             throw new IllegalArgumentException("La lista y el objeto no pueden ser null.");
         }
 
         // Lógica de asignación o validación de ID
-        if (objeto.getIdPersona() <= 0) {
+        if (Cocinero.getIdPersona() <= 0) {
             int maxId = 0;
             for (Cocinero c : lista) {
                 if (c.getIdPersona() > maxId) {
                     maxId = c.getIdPersona();
                 }
             }
-            objeto.setIdPersona(maxId + 1);
+            Cocinero.setIdPersona(maxId + 1);
         } else {
             for (Cocinero c : lista) {
-                if (c.getIdPersona() == objeto.getIdPersona()) {
-                    throw new IllegalArgumentException("Ya existe un cocinero con el ID: " + objeto.getIdPersona());
+                if (c.getIdPersona() == Cocinero.getIdPersona()) {
+                    throw new IllegalArgumentException("Ya existe un cocinero con el ID: " + Cocinero.getIdPersona());
                 }
             }
         }
 
-        lista.add(objeto);
-        return objeto;
+        lista.add(Cocinero);
+        return Cocinero;
     }
 
     @Override
-    public Cocinero actualizar(List<Cocinero> lista, Cocinero objeto) {
-        if (lista == null || objeto == null) {
+    public Cocinero actualizar(List<Cocinero> lista, Cocinero Cocinero) {
+        if (lista == null || Cocinero == null) {
             throw new IllegalArgumentException("La lista y el objeto no pueden ser null.");
         }
 
         for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getIdPersona() == objeto.getIdPersona()) {
-                lista.set(i, objeto);
-                return objeto;
+            if (lista.get(i).getIdPersona() == Cocinero.getIdPersona()) {
+                lista.set(i, Cocinero);
+                return Cocinero;
             }
         }
         return null;
     }
 
     @Override
-    public boolean eliminar(List<Cocinero> lista, int id) {
+    public boolean eliminar(List<Cocinero> lista, int idPersona) {
         if (lista == null) {
             throw new IllegalArgumentException("La lista no puede ser null.");
         }
-        return lista.removeIf(cocinero -> cocinero.getIdPersona() == id);
+        return lista.removeIf(cocinero -> cocinero.getIdPersona() == idPersona);
     }
 
     @Override

@@ -1,6 +1,6 @@
-package co.edu.poligran.paradigmas.agenda.dao;
+package co.edu.poligran.paradigmas.restaurante.dao;
 
-import co.edu.poligran.paradigmas.agenda.modelo.CorreoElectronico;
+import co.edu.poligran.paradigmas.restaurante.modelo.CorreoElectronico;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * Implementa las operaciones CRUD de {@link ICrudDAO} sobre listas en memoria
  * y añade la búsqueda por cuenta. Puede operar tanto sobre la lista
  * materializada global de correos como sobre la lista de correos de una
- * {@link co.edu.poligran.paradigmas.agenda.modelo.Persona}.
+ * {@link co.edu.poligran.paradigmas.restaurante.modelo.Persona}.
  * </p>
  *
  * @version 1.0
