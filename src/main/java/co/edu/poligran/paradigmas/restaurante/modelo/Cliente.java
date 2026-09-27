@@ -9,5 +9,17 @@ package co.edu.poligran.paradigmas.restaurante.modelo;
  * @author salaG201
  */
 public class Cliente extends Persona2 {
- 
+
+    public Cliente() {
+        super();
+    }
+
+    public Cliente(int idPersona, String nombre, String apellido, int tipoDoc, int numDoc, String correo, String contraseña, long celular, String NombreUsuario) {
+        super(idPersona, nombre, apellido, tipoDoc, numDoc, correo, contraseña, celular, NombreUsuario);
+    }
+    
+ public void pagar(){
+ }
+ public void recivirpedido(){
+ }
 }

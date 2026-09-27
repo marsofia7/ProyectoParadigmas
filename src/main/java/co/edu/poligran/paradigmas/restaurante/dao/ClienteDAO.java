@@ -4,38 +4,86 @@
  */
 package co.edu.poligran.paradigmas.restaurante.dao;
 
-import co.edu.poligran.paradigmas.restaurante.modelo.Persona2;
+import co.edu.poligran.paradigmas.restaurante.modelo.Cliente;
+import java.util.Collections;
 import java.util.List;
 
 /**
  *
  * @author salaG201
  */
-public class ClienteDAO implements ICrudDAO<Persona2>  {
+public class ClienteDAO implements ICrudDAO<Cliente> {
 
     @Override
-    public Persona2 crear(List<Persona2> lista, Persona2 Persona2) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Cliente crear(List<Cliente> lista, Cliente Cliente) {
+        if (lista == null || Cliente == null) {
+            throw new IllegalArgumentException("La lista y el objeto no pueden ser null.");
+        }
+
+        // Asignación autoincremental si el ID es <= 0
+        if (Cliente.getIdPersona() <= 0) {
+            int maxId = 0;
+            for (Cliente c : lista) {
+                if (c.getIdPersona() > maxId) {
+                    maxId = c.getIdPersona();
+                }
+            }
+            Cliente.setIdPersona(maxId + 1);
+        } else {
+            // Verificar que el ID no esté duplicado
+            for (Cliente c : lista) {
+                if (c.getIdPersona() == Cliente.getIdPersona()) {
+                    throw new IllegalArgumentException("Ya existe un cliente con el ID: " + Cliente.getIdPersona());
+                }
+            }
+        }
+
+        lista.add(Cliente);
+        return Cliente;
     }
 
     @Override
-    public Persona2 actualizar(List<Persona2> lista, Persona2 Persona2) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Cliente actualizar(List<Cliente> lista, Cliente Cliente) {
+        if (lista == null || Cliente == null) {
+            throw new IllegalArgumentException("La lista y el objeto no pueden ser null.");
+        }
+
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).getIdPersona() == Cliente.getIdPersona()) {
+                lista.set(i, Cliente);
+                return Cliente;
+            }
+        }
+        return null;
     }
 
     @Override
-    public boolean eliminar(List<Persona2> lista, int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean eliminar(List<Cliente> lista, int idPersona) {
+        if (lista == null) {
+            throw new IllegalArgumentException("La lista no puede ser null.");
+        }
+        return lista.removeIf(cliente -> cliente.getIdPersona() == idPersona);
     }
 
     @Override
-    public Persona2 buscarPorId(List<Persona2> lista, int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Cliente buscarPorId(List<Cliente> lista, int idPersona) {
+        if (lista == null) {
+            return null;
+        }
+
+        for (Cliente cliente : lista) {
+            if (cliente.getIdPersona() == idPersona) {
+                return cliente;
+            }
+        }
+        return null;
     }
 
     @Override
-    public List<Persona2> listar(List<Persona2> lista) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Cliente> listar(List<Cliente> lista) {
+        if (lista == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(lista);
     }
-    
 }
