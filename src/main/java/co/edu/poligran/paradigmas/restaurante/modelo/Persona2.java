@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Representa una persona de la agenda con sus teléfonos y correos.
+ * Representa una persona del sistema (clase base para Cliente, Administrador,
+ * Mesero, Cocinero y Domiciliario).
  */
 public class Persona2 {
 
@@ -21,11 +22,12 @@ public class Persona2 {
     private String contraseña;
     private long celular;
     private String NombreUsuario;
+    String rol;
 
     public Persona2() {
         
     }
-    public Persona2(int idPersona, String nombre, String apellido, int tipoDoc, int numDoc, String correo, String contraseña, long celular, String NombreUsuario) {
+    public Persona2(int idPersona, String nombre, String apellido, int tipoDoc, int numDoc, String correo, String contraseña, long celular, String NombreUsuario, String rol) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -35,6 +37,7 @@ public class Persona2 {
         this.contraseña = contraseña;
         this.celular = celular;
         this.NombreUsuario = NombreUsuario;
+        this.rol = rol;
     }
 
     public int getIdPersona() {
@@ -108,30 +111,31 @@ public class Persona2 {
     public void setNombreUsuario(String NombreUsuario) {
         this.NombreUsuario = NombreUsuario;
     } 
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    
+    public String getRol(){
+        return rol;
+    }
+    
+    public void setRol (String rol) {
+        this.rol = rol;
     }
 
+    /**
+     * Valida las credenciales recibidas contra las almacenadas en esta persona.
+     * @param usuario nombre del usuario ingresado
+     * @param clave contraseña ingresada
+     * @ return {@code true} si coincide con el usuario y contraseña
+     * 
+     */
+    public boolean iniciarSesion (String usuario, String clave) { 
+        if (usuario == null || clave == null) {
+            return false;
+        }
+        return usuario.equals (this.NombreUsuario) && clave.equals (this.contraseña);
+    }  
+    
     @Override
-    public String toString() {
-        return super.toString(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    public String toString(){
+        return "Persona (" + idPersona + ", nombre" + nombre + " " + apellido + ", usuario: " + NombreUsuario + ", rol: " + rol + ").";
     }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
- 
 }
