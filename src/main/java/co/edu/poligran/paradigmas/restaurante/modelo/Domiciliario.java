@@ -5,7 +5,8 @@
 package co.edu.poligran.paradigmas.restaurante.modelo;
 
 /**
- *
+ *Representa a un domiciliario, encargado e entregar pedidos.
+ * Hereda los atributos de la superclase Persona2
  * @author cdapalaciosa
  */
 public class Domiciliario extends Persona2 {
@@ -17,6 +18,18 @@ public class Domiciliario extends Persona2 {
     public Domiciliario(int idPersona, String nombre, String apellido, int tipoDoc, int numDoc, String correo, String contraseña, long celular, String NombreUsuario, String rol) {
         super(idPersona, nombre, apellido, tipoDoc, numDoc, correo, contraseña, celular, NombreUsuario, rol);
     }
+   
+    /**
+     * Marca como entregado el pedido indicado.
+     * @param idPedido identificador del pedido a entregar
+     * @return mensaje de confirmacion de la entrega
+     */
     
-    
+   public String entregarPedido (int idPedido) {
+       return "Pedido " + idPedido + " entregado por " + getNombre() + " " + getApellido();
+   } 
+   @Override
+   public String toString(){
+       return "Domiciliario (" + "ID: " + getIdPersona() + ", nombre: " + getNombre() + " " + getApellido() + ").";
+   }
 }
