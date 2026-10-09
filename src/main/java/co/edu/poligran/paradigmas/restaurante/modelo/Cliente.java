@@ -20,6 +20,6 @@ public class Cliente extends Persona2 {
     
  public void pagar(){
  }
- public void recivirpedido(){
+ public void recibirpedido(){
  }
 }

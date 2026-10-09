@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Representa una persona del sistema (clase base para Cliente, Administrador,
  * Mesero, Cocinero y Domiciliario).
+ * @author asofi
  */
 public class Persona2 {
 

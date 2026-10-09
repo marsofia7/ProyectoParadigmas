@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ *Implementaciòn del CRUD en memoria para la entidad Domiciliario
  * @author cdapalaciosa
  */
 public class DomiciliarioDAO implements ICrudDAO<Domiciliario> {

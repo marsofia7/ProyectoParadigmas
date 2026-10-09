@@ -7,7 +7,7 @@ package co.edu.poligran.paradigmas.restaurante.modelo;
 /**
  *Representa a un domiciliario, encargado e entregar pedidos.
  * Hereda los atributos de la superclase Persona2
- * @author cdapalaciosa
+ * @author asofi
  */
 public class Domiciliario extends Persona2 {
 
