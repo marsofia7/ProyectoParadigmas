@@ -4,10 +4,15 @@
  */
 package co.edu.poligran.paradigmas.restaurante.Manager;
 
+import co.edu.poligran.paradigmas.restaurante.dao.ClienteDAO;
+import co.edu.poligran.paradigmas.restaurante.modelo.Cliente;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author cdapalaciosa
  */
 public class CristianManager {
-    
+   
 }

@@ -1,7 +1,7 @@
 package co.edu.poligran.paradigmas.restaurante;
 
 /**
- * Centraliza todos los textos que se muestran en la consola.
+ * Centraliza todos los textos que se muestran en la consola para el sistema del restaurante.
  */
 public final class Mensajes {
 
@@ -13,108 +13,129 @@ public final class Mensajes {
     // ---------------------------------------------------------------- Menús
     public static final String BIENVENIDA
             = "==========================================" + NL
-            + "        BIENVENIDO A LA AGENDA" + NL
+            + "    BIENVENIDO AL SISTEMA DE RESTAURANTE  " + NL
             + "==========================================";
 
     public static final String MENU_PRINCIPAL
             = NL + "------------- MENÚ PRINCIPAL -------------" + NL
-            + " 1. Gestionar personas" + NL
-            + " 2. Gestionar teléfonos" + NL
-            + " 3. Gestionar correos electrónicos" + NL
-            + " 4. Ver agenda completa" + NL
+            + " 1. Gestionar Clientes" + NL
+            + " 2. Gestionar Administradores" + NL
+            + " 3. Gestionar Meseros" + NL
+            + " 4. Gestionar Cocineros" + NL
+            + " 5. Gestionar Domiciliarios" + NL
+            + " 6. Gestionar Productos y Categorías" + NL
+            + " 7. Gestionar Pedidos" + NL
             + " 0. Salir" + NL
             + "------------------------------------------";
 
-    public static final String MENU_PERSONAS
-            = NL + "---------------- PERSONAS ----------------" + NL
-            + " 1. Registrar persona (con teléfonos y correos)" + NL
-            + " 2. Listar personas" + NL
-            + " 3. Buscar persona por nombre" + NL
-            + " 4. Actualizar persona" + NL
-            + " 5. Eliminar persona" + NL
+    public static final String MENU_CLIENTES
+            = NL + "---------------- CLIENTES ----------------" + NL
+            + " 1. Registrar cliente" + NL
+            + " 2. Listar clientes" + NL
+            + " 3. Buscar cliente por ID" + NL
+            + " 4. Actualizar cliente" + NL
+            + " 5. Eliminar cliente" + NL
             + " 0. Volver" + NL
             + "------------------------------------------";
 
-    public static final String MENU_TELEFONOS
-            = NL + "---------------- TELÉFONOS ---------------" + NL
-            + " 1. Agregar teléfono a una persona" + NL
-            + " 2. Listar teléfonos" + NL
-            + " 3. Buscar teléfono por número" + NL
-            + " 4. Actualizar teléfono" + NL
-            + " 5. Eliminar teléfono" + NL
+    public static final String MENU_ADMINISTRADORES
+            = NL + "------------ ADMINISTRADORES -------------" + NL
+            + " 1. Registrar administrador" + NL
+            + " 2. Listar administradores" + NL
+            + " 3. Buscar administrador por ID" + NL
+            + " 4. Actualizar administrador" + NL
+            + " 5. Eliminar administrador" + NL
             + " 0. Volver" + NL
             + "------------------------------------------";
 
-    public static final String MENU_CORREOS
-            = NL + "---------- CORREOS ELECTRÓNICOS ----------" + NL
-            + " 1. Agregar correo a una persona" + NL
-            + " 2. Listar correos" + NL
-            + " 3. Buscar correo por cuenta" + NL
-            + " 4. Actualizar correo" + NL
-            + " 5. Eliminar correo" + NL
+    public static final String MENU_MESEROS
+            = NL + "----------------- MESEROS ----------------" + NL
+            + " 1. Registrar mesero" + NL
+            + " 2. Listar meseros" + NL
+            + " 3. Buscar mesero por ID" + NL
+            + " 4. Actualizar mesero" + NL
+            + " 5. Eliminar mesero" + NL
+            + " 0. Volver" + NL
+            + "------------------------------------------";
+
+    public static final String MENU_COCINEROS
+            = NL + "---------------- COCINEROS ---------------" + NL
+            + " 1. Registrar cocinero" + NL
+            + " 2. Listar cocineros" + NL
+            + " 3. Buscar cocinero por ID" + NL
+            + " 4. Actualizar cocinero" + NL
+            + " 5. Eliminar cocinero" + NL
+            + " 0. Volver" + NL
+            + "------------------------------------------";
+
+    public static final String MENU_DOMICILIARIOS
+            = NL + "-------------- DOMICILIARIOS -------------" + NL
+            + " 1. Registrar domiciliario" + NL
+            + " 2. Listar domiciliarios" + NL
+            + " 3. Buscar domiciliario por ID" + NL
+            + " 4. Actualizar domiciliario" + NL
+            + " 5. Eliminar domiciliario" + NL
+            + " 0. Volver" + NL
+            + "------------------------------------------";
+
+    public static final String MENU_PRODUCTOS
+            = NL + "---------- PRODUCTOS Y CATEGORÍAS --------" + NL
+            + " 1. Registrar categoría" + NL
+            + " 2. Registrar producto" + NL
+            + " 3. Listar productos" + NL
+            + " 4. Buscar producto por ID" + NL
+            + " 5. Actualizar producto" + NL
+            + " 6. Eliminar producto" + NL
+            + " 0. Volver" + NL
+            + "------------------------------------------";
+
+    public static final String MENU_PEDIDOS
+            = NL + "----------------- PEDIDOS ----------------" + NL
+            + " 1. Crear pedido" + NL
+            + " 2. Listar pedidos" + NL
+            + " 3. Buscar pedido por ID" + NL
+            + " 4. Actualizar estado de pedido" + NL
+            + " 5. Cancelar pedido" + NL
             + " 0. Volver" + NL
             + "------------------------------------------";
 
     // ------------------------------------------------------------- Generales
     public static final String SELECCIONE_OPCION = "Seleccione una opción: ";
     public static final String OPCION_INVALIDA = "Opción no válida. Intente de nuevo.";
-    public static final String NUMERO_INVALIDO = "Debe ingresar un número entero válido.";
+    public static final String NUMERO_INVALIDO = "Debe ingresar un número válido.";
     public static final String NUMERO_NEGATIVO = "El valor no puede ser negativo.";
     public static final String CAMPO_OBLIGATORIO = "Este campo es obligatorio.";
     public static final String OPERACION_CANCELADA = "Operación cancelada.";
-    public static final String CONFIRMAR = " (s/n): ";
-    public static final String MANTENER_VALOR = " [Enter para mantener: %s]: ";
     public static final String DESPEDIDA = "¡Hasta pronto!";
-    public static final String AGENDA_VACIA = "La agenda está vacía.";
-    public static final String TITULO_AGENDA = NL + "============= AGENDA COMPLETA ============";
     public static final String SEPARADOR = "------------------------------------------";
 
-    // -------------------------------------------------------------- Personas
-    public static final String TITULO_REGISTRO = NL + ">> Registro de nueva persona";
+    // -------------------------------------------------------------- Persona (Atributos comunes)
+    public static final String PEDIR_ID = "ID: ";
     public static final String PEDIR_NOMBRE = "Nombre: ";
     public static final String PEDIR_APELLIDO = "Apellido: ";
-    public static final String PEDIR_NOMBRE_BUSCAR = "Nombre a buscar: ";
-    public static final String PEDIR_ID_PERSONA = "Id de la persona: ";
-    public static final String PEDIR_CANTIDAD_TELEFONOS = "¿Cuántos teléfonos desea registrar? ";
-    public static final String PEDIR_CANTIDAD_CORREOS = "¿Cuántos correos desea registrar? ";
-    public static final String PERSONA_REGISTRADA = "Persona registrada con id: ";
-    public static final String PERSONA_ACTUALIZADA = "Persona actualizada correctamente.";
-    public static final String PERSONA_ELIMINADA = "Persona eliminada junto con sus teléfonos y correos.";
-    public static final String PERSONA_NO_ENCONTRADA = "No se encontró ninguna persona.";
-    public static final String CONFIRMAR_ELIMINAR_PERSONA = "¿Seguro que desea eliminar a %s?";
-    public static final String SIN_PERSONAS = "No hay personas registradas.";
-    public static final String PERSONA_SELECCIONADA = "Persona: ";
+    public static final String PEDIR_TIPO_DOC = "Tipo de Documento: ";
+    public static final String PEDIR_NUM_DOC = "Número de Documento: ";
+    public static final String PEDIR_CORREO = "Correo electrónico: ";
+    public static final String PEDIR_CONTRASENA = "Contraseña: ";
+    public static final String PEDIR_CELULAR = "Celular: ";
+    public static final String PEDIR_NOMBRE_USUARIO = "Nombre de usuario: ";
 
-    // ------------------------------------------------------------- Teléfonos
-    public static final String TITULO_TELEFONO = ">> Teléfono #%d";
-    public static final String PEDIR_NUMERO = "Número: ";
-    public static final String PEDIR_NUMERO_BUSCAR = "Número a buscar: ";
-    public static final String PEDIR_DESCRIPCION = "Descripción (ej. Celular, Casa, Oficina): ";
-    public static final String PEDIR_ID_TELEFONO = "Id del teléfono: ";
-    public static final String NUMERO_FORMATO_INVALIDO
-            = "Número inválido: use solo dígitos, espacios, '+' o '-' (7 a 15 caracteres).";
-    public static final String NUMERO_DUPLICADO = "Ese número ya está registrado en la agenda.";
-    public static final String TELEFONO_AGREGADO = "Teléfono agregado con id: ";
-    public static final String TELEFONO_ACTUALIZADO = "Teléfono actualizado correctamente.";
-    public static final String TELEFONO_ELIMINADO = "Teléfono eliminado correctamente.";
-    public static final String TELEFONO_NO_ENCONTRADO = "No se encontró el teléfono.";
-    public static final String SIN_TELEFONOS = "No hay teléfonos registrados.";
-    public static final String ETIQUETA_TELEFONOS = "  Teléfonos:";
-    public static final String ETIQUETA_SIN_TELEFONOS = "    (sin teléfonos)";
+    // -------------------------------------------------------------- Pedido
+    public static final String PEDIR_NUMERO_MESA = "Número de mesa: ";
+    public static final String PEDIR_TOTAL = "Total: ";
+    public static final String PEDIR_ESTADO = "Estado del pedido: ";
+    public static final String PEDIR_FORMA_PAGO = "Forma de pago: ";
+    public static final String PEDIDO_CREADO = "Pedido creado exitosamente con ID: ";
+    public static final String PEDIDO_ACTUALIZADO = "Pedido actualizado correctamente.";
+    public static final String PEDIDO_ELIMINADO = "Pedido eliminado o cancelado correctamente.";
+    public static final String PEDIDO_NO_ENCONTRADO = "No se encontró el pedido.";
+    public static final String SIN_PEDIDOS = "No hay pedidos registrados.";
 
-    // --------------------------------------------------------------- Correos
-    public static final String TITULO_CORREO = ">> Correo #%d";
-    public static final String PEDIR_CUENTA = "Cuenta de correo: ";
-    public static final String PEDIR_CUENTA_BUSCAR = "Cuenta a buscar: ";
-    public static final String PEDIR_ID_CORREO = "Id del correo: ";
-    public static final String CUENTA_FORMATO_INVALIDO = "Formato de correo inválido (ej. usuario@dominio.com).";
-    public static final String CUENTA_DUPLICADA = "Esa cuenta ya está registrada en la agenda.";
-    public static final String CORREO_AGREGADO = "Correo agregado con id: ";
-    public static final String CORREO_ACTUALIZADO = "Correo actualizado correctamente.";
-    public static final String CORREO_ELIMINADO = "Correo eliminado correctamente.";
-    public static final String CORREO_NO_ENCONTRADO = "No se encontró el correo.";
-    public static final String SIN_CORREOS = "No hay correos registrados.";
-    public static final String ETIQUETA_CORREOS = "  Correos:";
-    public static final String ETIQUETA_SIN_CORREOS = "    (sin correos)";
-    public static final String PERTENECE_A = "  Pertenece a: ";
+    // -------------------------------------------------------------- Producto y Categoría
+    public static final String PEDIR_DESCRIPCION = "Descripción: ";
+    public static final String PEDIR_PRECIO = "Precio: ";
+    public static final String PRODUCTO_REGISTRADO = "Producto registrado con ID: ";
+    public static final String CATEGORIA_REGISTRADA = "Categoría registrada con ID: ";
+    public static final String PRODUCTO_NO_ENCONTRADO = "No se encontró el producto.";
+    public static final String SIN_PRODUCTOS = "No hay productos registrados.";
 }
