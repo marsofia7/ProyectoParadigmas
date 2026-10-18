@@ -6,11 +6,16 @@ package co.edu.poligran.paradigmas.restaurante.Manager;
 
 import co.edu.poligran.paradigmas.restaurante.dao.AdministradorDAO;
 import co.edu.poligran.paradigmas.restaurante.dao.MeseroDAO;
+import co.edu.poligran.paradigmas.restaurante.dao.PedidoDAO;
 import co.edu.poligran.paradigmas.restaurante.modelo.Administrador;
 import co.edu.poligran.paradigmas.restaurante.modelo.Mesero;
+import co.edu.poligran.paradigmas.restaurante.modelo.Pedido;
 import co.edu.poligran.paradigmas.restaurante.modelo.Persona2;
+import co.edu.poligran.paradigmas.restaurante.modelo.Producto;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -23,12 +28,17 @@ public class DaniloManager {
     
     private final List<Mesero> meseros;
     private final List<Administrador> administradores;
+    private final List<Producto> productosPedido;
+    private final List<Pedido> pedidos;
     private MeseroDAO controlMesero;
     private AdministradorDAO controlAdministrador;
+    private PedidoDAO controlPedido;
 
     public DaniloManager() {
         this.meseros=new ArrayList<>();
         this.administradores=new ArrayList<>();
+        this.productosPedido=new ArrayList<>();
+        this.pedidos=new ArrayList<>();
     }
     
     //Metodos Administrador/Mesero
@@ -335,9 +345,7 @@ public class DaniloManager {
     
     //Mostrar lista
     public void mostrar(int rol){
-        boolean control = false;
-        Persona2 usuario= new Persona2();
-        String usuarioRol="";
+        String usuarioRol;
         if(rol==1){
             usuarioRol = "Mesero";
             System.out.print("Lista de "+usuarioRol+":\n");
@@ -357,14 +365,187 @@ public class DaniloManager {
     
     //Funciones de mesero
     
-    public int asginarMesa(int mesa){
-        if (mesa<= 20) {
-            return mesa++;
+    public void asignarMesa(List<Pedido> lista, Pedido pedido ){
+        if (pedido.getNumeroMesa()<= 20) {
+            int maxId = 0;
+            for (Pedido c : lista) {
+                if (c.getNumeroMesa()> maxId) {
+                    maxId = c.getNumeroMesa();
+                }
+            }
+            pedido.setNumeroMesa(maxId + 1);
         } 
-
-        return-1;
+        else{
+            System.out.print("\n\nYa todas las mesas fueron asignadas.");
+        }
     }
     
+    public void calcularTotal(List<Producto> lista, Pedido pedido){
+        long total=0;
+        for(Producto c: lista){
+            total=total+c.getPrecioProducto();
+        }
+        pedido.setTotal(total);
+    }
+    
+    public Producto buscarProducto(List<Producto> lista, int idProducto) {
+        for (Producto c: lista) {
+            if(c.getIdProducto()==idProducto){
+                return c;
+            }
+        }
+        return null;
+    }
+    
+    public void agregarProducto(List<Producto> listaProductos, List<Producto> productosNuevoPedido){
+        boolean control = false;
+        
+        do {           
+            try {
+                System.out.print("Ingres el id del producto: ");
+                int idProducto = tecla.nextInt();
+                if(idProducto <0) throw new IllegalArgumentException();
+                control = true;
+                Producto nuevo = buscarProducto(listaProductos, idProducto);
+                if(nuevo!=null){
+                    productosNuevoPedido.add(nuevo);
+                    System.out.print("Producto agregado.");
+                }
+                else{
+                    System.out.print("\n\nNo Existe un Producto Con el Id Ingresado.");
+                }
+            } 
+            catch (NumberFormatException e) {
+                System.out.print("\nSolo se admiten Numeros");
+            }
+            catch (IllegalArgumentException a){
+                System.out.print("\nNo se admiten numeros negativos");
+            }
+        } while (!control);      
+    }
+    
+    public boolean eliminarProducto(List<Producto> productosNuevoPedido, int idProducto){
+        if (productosNuevoPedido == null) {
+            throw new IllegalArgumentException("La lista y el objeto no pueden ser null.");
+        }
+        return productosNuevoPedido.removeIf(producto -> producto.getIdProducto()== idProducto);    
+    }
+    
+    public void crearPedido(List<Producto> productosDisponibles){
+        int opcion =0;
+        List<Producto> productosDelPedido=new ArrayList<>();
+        do {            
+            boolean control = false;
+            do {            
+                try {
+                    System.out.print("\nPedido Nuevo."
+                    + "\n1. Agregar Producto."
+                    + "\n2. Eliminar Producto."
+                    + "\n3. Completar Pedido."
+                    + "\n4. Cancelar Pedido / Volver al Menu anterior."
+                    + "\n\nSeleccione una opcion: ");
+            
+                    opcion= tecla.nextInt();
+                    control =true;
+                    
+                } catch (NumberFormatException e) {
+                    System.out.print("Solo se aceptan Numeros como opcion.");
+                }
+                switch (opcion) {
+                    case 1:
+                        agregarProducto(productosDisponibles, productosDelPedido);
+                        break;
+                    case 2:
+                        do {           
+                            try {
+                                System.out.print("Ingres el id del producto: ");
+                                int idProducto = tecla.nextInt();
+                                if(idProducto <0) throw new IllegalArgumentException();
+                                control = true;
+                                boolean eliminado= eliminarProducto(productosDelPedido, idProducto);
+                                if(eliminado)System.out.print("\nProducto Eliminado.");
+                                else System.out.print("\nProducto No Encontrado.");
+                               
+                            } 
+                            catch (NumberFormatException e) {
+                                System.out.print("\nSolo se admiten Numeros");
+                            }
+                            catch (IllegalArgumentException a){
+                                System.out.print("\nNo se admiten numeros negativos");
+                            }
+                        } while (!control); 
+                        break;
+                        
+                    case 3:
+                        Pedido nuevo =new Pedido(0, 0, 0, "En Proceso", LocalDateTime.now(), "tarjeta", productosDelPedido);
+                        asignarMesa(pedidos, nuevo);
+                        calcularTotal(productosDelPedido, nuevo);
+                        controlPedido.crear(pedidos, nuevo);
+                        System.out.print("Pedido creado correctamente");
+                        break;
+                                
+                    case 4:
+                        System.out.print("Regresando al Menu.");
+                        break;
+                        
+                    default:
+                        System.out.print("\n\nOpcion Invalida.");
+                }
+                
+            } while (!control);
+            
+        } while (opcion!=3 && opcion!=4);
+       
+    }
+    
+    
+    public List<Producto> crearProducto(List<Producto> productosRestaurante){
+        
+        Producto nuevo = new Producto();
+        productosRestaurante.add(nuevo);
+        
+        return Collections.unmodifiableList(productosRestaurante);
+    }
+    
+    public void eliminarPedido(List<Pedido> lista){
+        boolean control = false;
+        do {           
+            try {
+                System.out.print("Ingres el id del pedidido: ");
+                int idPedido = tecla.nextInt();
+                if(idPedido <0) throw new IllegalArgumentException();
+                control = true;
+                boolean eliminado= controlPedido.eliminar(lista, idPedido);
+                if(eliminado)System.out.print("\nPedido Eliminado.");
+                else System.out.print("\nPedido No Encontrado.");   
+            } 
+            catch (NumberFormatException e) {
+                System.out.print("\nSolo se admiten Numeros");
+            }
+            catch (IllegalArgumentException a){
+                System.out.print("\nNo se admiten numeros negativos");
+            }
+        } while (!control);
+    }
+    
+    public void marcarEntregado(){
+        boolean control = false;
+        do {           
+            try {
+                System.out.print("Ingrese el id del pedidido: ");
+                int idPedido = tecla.nextInt();
+                if(idPedido <0) throw new IllegalArgumentException();
+                control = true;
+                controlPedido.buscarPorId(pedidos, idPedido).setEstado("entregado");
+            } 
+            catch (NumberFormatException e) {
+                System.out.print("\nSolo se admiten Numeros");
+            }
+            catch (IllegalArgumentException a){
+                System.out.print("\nNo se admiten numeros negativos");
+            }
+        } while (!control);
+    }
     
     
     

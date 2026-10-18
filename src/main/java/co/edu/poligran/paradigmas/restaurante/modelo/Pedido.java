@@ -4,7 +4,9 @@
  */
 package co.edu.poligran.paradigmas.restaurante.modelo;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -15,19 +17,25 @@ public class Pedido {
     private int numeroMesa;
     private long total;
     private String estado;
-    private Date marcadeTiempo;
+    private LocalDateTime marcadeTiempo;
     private String formaDePago;
+    private List<Producto> productos;
 
     public Pedido() {
     }
 
-    public Pedido(int id, int numeroMesa, long total, String estado, Date marcadeTiempo, String formaDePago) {
+    public Pedido(int id, int numeroMesa, long total, String estado, LocalDateTime marcadeTiempo, String formaDePago, List<Producto> productos) {
         this.id = id;
         this.numeroMesa = numeroMesa;
         this.total = total;
         this.estado = estado;
         this.marcadeTiempo = marcadeTiempo;
         this.formaDePago = formaDePago;
+        this.productos=productos;
+    }
+    
+    public List<Producto> getProductos(){
+        return productos;
     }
 
     public int getId() {
@@ -62,11 +70,11 @@ public class Pedido {
         this.estado = estado;
     }
 
-    public Date getMarcadeTiempo() {
+    public LocalDateTime getMarcadeTiempo() {
         return marcadeTiempo;
     }
 
-    public void setMarcadeTiempo(Date marcadeTiempo) {
+    public void setMarcadeTiempo(LocalDateTime marcadeTiempo) {
         this.marcadeTiempo = marcadeTiempo;
     }
 
