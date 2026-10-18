@@ -125,14 +125,13 @@ public class Persona2 {
      * Valida las credenciales recibidas contra las almacenadas en esta persona.
      * @param usuario nombre del usuario ingresado
      * @param clave contraseña ingresada
-     * @ return {@code true} si coincide con el usuario y contraseña
-     * 
+     * @return {@code true} si coincide con el usuario y contraseña
      */
     public boolean iniciarSesion (String usuario, String clave) { 
         if (usuario == null || clave == null) {
             return false;
         }
-        return usuario.equals (this.NombreUsuario) && clave.equals (this.contraseña);
+        return usuario.equals(this.NombreUsuario) && clave.equals(this.contraseña);
     }  
     
     @Override
