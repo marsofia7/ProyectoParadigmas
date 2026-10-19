@@ -21,7 +21,7 @@ public class Restaurante {
     public static void main(String[] args) {
         System.out.println(Mensajes.BIENVENIDA);
 
-        // Control de acceso obligatorio previo: fuerza Iniciar Sesión o Registrar Persona
+        // Control de acceso obligatorio previo
         Persona2 usuarioActivo = autenticarORegistrar();
         if (usuarioActivo == null) {
             System.out.println(Mensajes.DESPEDIDA);
@@ -32,25 +32,32 @@ public class Restaurante {
         System.out.println(" ¡Acceso concedido! Bienvenid@, " + usuarioActivo.getNombre() + " [" + usuarioActivo.getRol() + "]");
         System.out.println("==========================================");
 
-        int op = -1;
-        do {
-            System.out.println(Mensajes.MENU_PRINCIPAL);
-            System.out.print(Mensajes.SELECCIONE_OPCION);
-            try {
-                op = Integer.parseInt(scanner.nextLine());
-                switch (op) {
-                    case 1: menuClientes(usuarioActivo); break;
-                    case 2: menuAdministradores(usuarioActivo); break;
-                    case 3: menuMeseros(usuarioActivo); break;
-                    case 4: menuCocineros(usuarioActivo); break;
-                    case 5: menuDomiciliarios(usuarioActivo); break;
-                    case 6: menuProductos(usuarioActivo); break;
-                    case 7: menuPedidos(usuarioActivo); break;
-                    case 0: System.out.println(Mensajes.DESPEDIDA); break;
-                    default: System.out.println(Mensajes.OPCION_INVALIDA);
-                }
-            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
-        } while (op != 0);
+        // Enrutamiento directo al menú correspondiente según el rol del usuario autenticado
+        String rol = usuarioActivo.getRol().toLowerCase();
+        
+        switch (rol) {
+            case "cliente":
+                menuCliente(usuarioActivo);
+                break;
+            case "mesero":
+                menuMesero(usuarioActivo);
+                break;
+            case "cocinero":
+                menuCocinero(usuarioActivo);
+                break;
+            case "domiciliario":
+                menuDomiciliario(usuarioActivo);
+                break;
+            case "administrador":
+                menuAdministrador(usuarioActivo);
+                break;
+            default:
+                // Menú general por defecto si el rol es genérico
+                menuGeneral(usuarioActivo);
+                break;
+        }
+        
+        System.out.println("\n" + Mensajes.DESPEDIDA);
     }
 
     private static Persona2 autenticarORegistrar() {
@@ -72,9 +79,12 @@ public class Restaurante {
                     System.out.println("❌ Credenciales incorrectas o el usuario no existe.");
                 } else if (op == 2) {
                     String rol = capturarRol();
-                    Persona2 registrada = anaManager.registrarPersona(capturarPersona(rol));
-                    System.out.println("\n✅ Persona registrada exitosamente como " + registrada.getRol() + ".");
-                    System.out.println("Ahora puede iniciar sesión con sus credenciales.");
+                    Persona2 nueva = capturarPersona(rol);
+                    Persona2 registrada = anaManager.registrarPersona(nueva);
+                    if (registrada != null) {
+                        System.out.println("\n✅ Persona registrada exitosamente como " + registrada.getRol() + ".");
+                        System.out.println("Ahora puede iniciar sesión con sus credenciales.");
+                    }
                 } else if (op == 0) {
                     return null;
                 }
@@ -82,169 +92,168 @@ public class Restaurante {
         }
     }
 
-    private static void menuClientes(Persona2 usuario) {
+    // =========================================================================
+    // MENÚS ESPECÍFICOS POR CADA ROL
+    // =========================================================================
+
+    private static void menuCliente(Persona2 clienteUser) {
         int op = -1;
+        Cliente clienteObj = new Cliente();
         do {
-            System.out.println(Mensajes.MENU_CLIENTES);
+            System.out.println("\n---------------- MENÚ CLIENTE ----------------");
+            System.out.println(" 1. Ver Pedidos / Consultar Estado");
+            System.out.println(" 2. Pagar Pedido");
+            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println("----------------------------------------------");
             System.out.print(Mensajes.SELECCIONE_OPCION);
             try {
                 op = Integer.parseInt(scanner.nextLine());
                 if (op == 1) {
-                    anaManager.registrarPersona(capturarPersona("Cliente"));
-                    System.out.println("¡Cliente registrado exitosamente!");
-                } else if (op == 2) anaManager.listarPersonas().forEach(System.out::println);
-            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
-        } while (op != 0);
-    }
-
-    private static void menuAdministradores(Persona2 usuario) {
-        int op = -1;
-        do {
-            System.out.println(Mensajes.MENU_ADMINISTRADORES);
-            System.out.print(Mensajes.SELECCIONE_OPCION);
-            try {
-                op = Integer.parseInt(scanner.nextLine());
-                if (op == 1) {
-                    daniloManager.administradorManager(2, null); // Conecta con DaniloManager para administradores
-                } else if (op == 2) {
-                    daniloManager.mostrar(2);
-                } else if (op == 3) {
-                    // Opciones de gestión completa de usuarios provista por DaniloManager
-                    daniloManager.gestionUsuarios();
-                } else if (op == 4) {
-                    daniloManager.gestionMesas();
-                } else if (op == 0) {
-                    break;
-                }
-            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
-        } while (op != 0);
-    }
-
-    private static void menuMeseros(Persona2 usuario) {
-        int op = -1;
-        do {
-            System.out.println(Mensajes.MENU_MESEROS);
-            System.out.print(Mensajes.SELECCIONE_OPCION);
-            try {
-                op = Integer.parseInt(scanner.nextLine());
-                if (op == 1) {
-                    daniloManager.meseroManager(1, null); // Conecta con DaniloManager para meseros
-                } else if (op == 2) {
-                    daniloManager.mostrar(1);
-                } else if (op == 0) {
-                    break;
-                }
-            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
-        } while (op != 0);
-    }
-
-    private static void menuCocineros(Persona2 usuario) {
-        int op = -1;
-        Cocinero cocinero = new Cocinero();
-        do {
-            System.out.println(Mensajes.MENU_COCINEROS);
-            System.out.print(Mensajes.SELECCIONE_OPCION);
-            try {
-                op = Integer.parseInt(scanner.nextLine());
-                if (op == 1) {
-                    anaManager.registrarPersona(capturarPersona("Cocinero"));
-                    System.out.println("¡Cocinero registrado!");
-                } else if (op == 4) {
-                    if (!usuario.getRol().equalsIgnoreCase("Cocinero") && !usuario.getRol().equalsIgnoreCase("Administrador")) {
-                        System.out.println("❌ Solo Cocineros o Administradores pueden gestionar la cocina.");
-                        continue;
-                    }
-                    System.out.print(Mensajes.PEDIR_ID);
-                    int id = Integer.parseInt(scanner.nextLine());
-                    Pedido p = cristianManager.buscarPedidoPorId(id);
-                    if (p != null) {
-                        cocinero.verPedido(p);
-                        String nuevoEstado = capturarEstadoPedido();
-                        cocinero.estadoPedido(p, nuevoEstado);
-                        cristianManager.actualizarEstadoPedido(id, nuevoEstado);
-                        System.out.println(Mensajes.PEDIDO_ACTUALIZADO);
-                    } else {
-                        System.out.println(Mensajes.PEDIDO_NO_ENCONTRADO);
-                    }
-                }
-            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
-        } while (op != 0);
-    }
-
-    private static void menuDomiciliarios(Persona2 usuario) {
-        int op = -1;
-        do {
-            System.out.println(Mensajes.MENU_DOMICILIARIOS);
-            System.out.print(Mensajes.SELECCIONE_OPCION);
-            try {
-                op = Integer.parseInt(scanner.nextLine());
-                if (op == 1) {
-                    anaManager.registrarPersona(capturarPersona("Domiciliario"));
-                    System.out.println("¡Domiciliario registrado!");
-                } else if (op == 2) anaManager.listarPersonas().forEach(System.out::println);
-            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
-        } while (op != 0);
-    }
-
-    private static void menuProductos(Persona2 usuario) {
-        int op = -1;
-        do {
-            System.out.println(Mensajes.MENU_PRODUCTOS);
-            System.out.print(Mensajes.SELECCIONE_OPCION);
-            try {
-                op = Integer.parseInt(scanner.nextLine());
-                if (op == 1 || op == 2) {
-                    if (!usuario.getRol().equalsIgnoreCase("Administrador")) {
-                        System.out.println("❌ Solo un Administrador puede gestionar productos.");
-                        continue;
-                    }
-                    daniloManager.gestionProductos();
-                } else if (op == 3) {
-                    // Listado general provisto por Cristian o Danilo
-                    cristianManager.listarProductos().forEach(System.out::println);
-                }
-            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
-        } while (op != 0);
-    }
-
-    private static void menuPedidos(Persona2 usuario) {
-        int op = -1;
-        Cliente clienteAux = new Cliente();
-        do {
-            System.out.println(Mensajes.MENU_PEDIDOS);
-            System.out.print(Mensajes.SELECCIONE_OPCION);
-            try {
-                op = Integer.parseInt(scanner.nextLine());
-                if (op == 1) { // Crear pedido
-                    if (!usuario.getRol().equalsIgnoreCase("Mesero") && !usuario.getRol().equalsIgnoreCase("Administrador")) {
-                        System.out.println("❌ Solo un Mesero o Administrador pueden crear un pedido.");
-                        continue;
-                    }
-                    daniloManager.crearPedido(cristianManager.listarProductos());
-
-                } else if (op == 2) { // Listar pedidos
                     var peds = cristianManager.listarPedidos();
                     if (peds.isEmpty()) System.out.println(Mensajes.SIN_PEDIDOS);
                     else peds.forEach(System.out::println);
-
-                } else if (op == 4) { // Actualizar estado / Pagar
+                } else if (op == 2) {
                     System.out.print(Mensajes.PEDIR_ID);
                     int id = Integer.parseInt(scanner.nextLine());
                     Pedido p = cristianManager.buscarPedidoPorId(id);
                     if (p != null) {
+                        String formaPago = capturarFormaPago();
+                        clienteObj.pagar(p, formaPago);
+                        System.out.println("✅ Pago realizado con éxito mediante " + formaPago);
+                    } else {
+                        System.out.println(Mensajes.PEDIDO_NO_ENCONTRADO);
+                    }
+                }
+            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
+        } while (op != 0);
+    }
+
+    private static void menuMesero(Persona2 meseroUser) {
+        int op = -1;
+        do {
+            System.out.println("\n---------------- MENÚ MESERO -----------------");
+            System.out.println(" 1. Crear Pedido (con selección de productos y mesa)");
+            System.out.println(" 2. Listar Pedidos");
+            System.out.println(" 3. Marcar Pedido como Entregado");
+            System.out.println(" 4. Eliminar Pedido");
+            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println("----------------------------------------------");
+            System.out.print(Mensajes.SELECCIONE_OPCION);
+            try {
+                op = Integer.parseInt(scanner.nextLine());
+                if (op == 1) {
+                    daniloManager.crearPedido(cristianManager.listarProductos());
+                } else if (op == 2) {
+                    var peds = cristianManager.listarPedidos();
+                    if (peds.isEmpty()) System.out.println(Mensajes.SIN_PEDIDOS);
+                    else peds.forEach(System.out::println);
+                } else if (op == 3) {
+                    daniloManager.marcarEntregado();
+                } else if (op == 4) {
+                    daniloManager.eliminarPedido(cristianManager.listarPedidos());
+                }
+            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
+        } while (op != 0);
+    }
+
+    private static void menuCocinero(Persona2 cocineroUser) {
+        int op = -1;
+        Cocinero cocineroObj = new Cocinero();
+        do {
+            System.out.println("\n--------------- MENÚ COCINERO ----------------");
+            System.out.println(" 1. Ver Pedidos en Curso");
+            System.out.println(" 2. Cambiar Estado de Pedido (En Preparación / Listo)");
+            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println("----------------------------------------------");
+            System.out.print(Mensajes.SELECCIONE_OPCION);
+            try {
+                op = Integer.parseInt(scanner.nextLine());
+                if (op == 1) {
+                    var peds = cristianManager.listarPedidos();
+                    if (peds.isEmpty()) System.out.println(Mensajes.SIN_PEDIDOS);
+                    else peds.forEach(System.out::println);
+                } else if (op == 2) {
+                    System.out.print(Mensajes.PEDIR_ID);
+                    int id = Integer.parseInt(scanner.nextLine());
+                    Pedido p = cristianManager.buscarPedidoPorId(id);
+                    if (p != null) {
+                        cocineroObj.verPedido(p);
                         String nuevoEstado = capturarEstadoPedido();
+                        cocineroObj.estadoPedido(p, nuevoEstado);
                         cristianManager.actualizarEstadoPedido(id, nuevoEstado);
                         System.out.println(Mensajes.PEDIDO_ACTUALIZADO);
                     } else {
                         System.out.println(Mensajes.PEDIDO_NO_ENCONTRADO);
                     }
                 }
+            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
+        } while (op != 0);
+    }
+
+    private static void menuDomiciliario(Persona2 domiciliarioUser) {
+        int op = -1;
+        do {
+            System.out.println("\n------------- MENÚ DOMICILIARIO --------------");
+            System.out.println(" 1. Listar Pedidos Listos para Entrega");
+            System.out.println(" 2. Marcar Pedido como Entregado");
+            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println("----------------------------------------------");
+            System.out.print(Mensajes.SELECCIONE_OPCION);
+            try {
+                op = Integer.parseInt(scanner.nextLine());
+                if (op == 1) {
+                    var peds = cristianManager.listarPedidos();
+                    if (peds.isEmpty()) System.out.println(Mensajes.SIN_PEDIDOS);
+                    else peds.forEach(System.out::println);
+                } else if (op == 2) {
+                    daniloManager.marcarEntregado();
+                }
+            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
+        } while (op != 0);
+    }
+
+    private static void menuAdministrador(Persona2 adminUser) {
+        int op = -1;
+        do {
+            System.out.println("\n------------ MENÚ ADMINISTRADOR --------------");
+            System.out.println(" 1. Gestión de Productos (Crear, Modificar, Eliminar)");
+            System.out.println(" 2. Gestión de Mesas (Asignación y reasignación)");
+            System.out.println(" 3. Gestión de Usuarios (Meseros, Admins, Cocineros, etc.)");
+            System.out.println(" 4. Ver Tiempos y Estados de Pedidos");
+            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println("----------------------------------------------");
+            System.out.print(Mensajes.SELECCIONE_OPCION);
+            try {
+                op = Integer.parseInt(scanner.nextLine());
+                if (op == 1) {
+                    daniloManager.gestionProductos();
+                } else if (op == 2) {
+                    daniloManager.gestionMesas();
+                } else if (op == 3) {
+                    daniloManager.gestionUsuarios();
+                } else if (op == 4) {
+                    daniloManager.verTiempos();
+                }
+            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
+        } while (op != 0);
+    }
+
+    private static void menuGeneral(Persona2 usuario) {
+        // Menú genérico de respaldo si el rol no coincide exactamente
+        int op = -1;
+        do {
+            System.out.println(Mensajes.MENU_PRINCIPAL);
+            System.out.print(Mensajes.SELECCIONE_OPCION);
+            try {
+                op = Integer.parseInt(scanner.nextLine());
+                if (op == 6) cristianManager.listarProductos().forEach(System.out::println);
+                else if (op == 7) cristianManager.listarPedidos().forEach(System.out::println);
             } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
         } while (op != 0);
     }
 
     // =========================================================================
-    // CAPTURAS AUXILIARES CON VALIDACIONES
+    // CAPTURAS AUXILIARES
     // =========================================================================
 
     private static String capturarRol() {

@@ -4,65 +4,75 @@
  */
 package co.edu.poligran.paradigmas.restaurante.Manager;
 
-import co.edu.poligran.paradigmas.restaurante.dao.DetallePedidoDAO;
-import co.edu.poligran.paradigmas.restaurante.dao.DomiciliarioDAO;
-import co.edu.poligran.paradigmas.restaurante.dao.PedidoDAO;
-import co.edu.poligran.paradigmas.restaurante.dao.Persona2DAO;
-import co.edu.poligran.paradigmas.restaurante.modelo.DetallePedido;
-import co.edu.poligran.paradigmas.restaurante.modelo.Domiciliario;
-import co.edu.poligran.paradigmas.restaurante.modelo.Pedido;
 import co.edu.poligran.paradigmas.restaurante.modelo.Persona2;
-import co.edu.poligran.paradigmas.restaurante.modelo.Producto;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-/**
- *Manager Ana. Integra funcionalidades de Persona, Domiciliario y Pedido/Detalle de Pedido.
- * IMPORTANTE: Pedido no tiene un campo IdDomiciliario, por lo que la asignación domiciliario pedido se manejara aqui mediante un hashmap.
- * Si se agrega este campo a Pedido este se puede reemplazar por pedido.setIdDomiciliario().
- * @author cdapalaciosa
- */
+
 public class AnaManager {
-    
-    private final List<Persona2> personas = new ArrayList <>();
-    private final List<Domiciliario> domiciliarios = new ArrayList <>();
-    private final List<Pedido> pedidos = new ArrayList <>();
-    private final List<DetallePedido> detalles = new ArrayList <>();
-    
-    private final Map<Integer, Integer> asignaciones = new HashMap<>();
-    
-    private final Persona2DAO personaDAO = new Persona2DAO();
-    private final DomiciliarioDAO domiciliarioDAO = new DomiciliarioDAO();
-    private final PedidoDAO pedidoDAO = new PedidoDAO();
-    private final DetallePedidoDAO detallepedidoDAO = new DetallePedidoDAO();
-    
-    //======================persona====================
-    //Registrar usuario
-    
-    public Persona2 registrarPersona(Persona2 persona){
-        return personaDAO.crear (personas, persona);
+
+    private final List<Persona2> listaPersonas = new ArrayList<>();
+
+    /**
+     * Registra una nueva persona validando que sus datos únicos no estén duplicados.
+     */
+    public Persona2 registrarPersona(Persona2 nuevaPersona) {
+        // Validación previa antes de agregar a la lista
+        if (!validarPersonaUnica(nuevaPersona)) {
+            return null; // Retorna null si algún dato único ya existe
+        }
+        
+        // Asignar ID autoincrementable si no lo tiene
+        if (nuevaPersona.getIdPersona() <= 0) {
+            int maxId = 0;
+            for (Persona2 p : listaPersonas) {
+                if (p.getIdPersona() > maxId) {
+                    maxId = p.getIdPersona();
+                }
+            }
+            nuevaPersona.setIdPersona(maxId + 1);
+        }
+
+        listaPersonas.add(nuevaPersona);
+        return nuevaPersona;
     }
-    
-   //iniciar sesión
-    public Persona2 iniciarSesion(String usuario, String clave){
-       Persona2 p =  personaDAO.buscarPorNombreUsuario(personas, usuario);
-       if(p != null && p.iniciarSesion(usuario, clave)){
-        return p;   
-       }
-       return null;
+
+    /**
+     * Valida que documento, correo, usuario y celular no se repitan.
+     * Permite repetir nombre y apellido.
+     */
+    public boolean validarPersonaUnica(Persona2 nuevaPersona) {
+        for (Persona2 p : listaPersonas) {
+            if (p.getNumDoc() == nuevaPersona.getNumDoc()) {
+                System.out.println(" Error: Ya existe una persona registrada con el número de documento: " + nuevaPersona.getNumDoc());
+                return false;
+            }
+            if (p.getCorreo() != null && p.getCorreo().equalsIgnoreCase(nuevaPersona.getCorreo())) {
+                System.out.println(" Error: Ya existe una persona registrada con el correo: " + nuevaPersona.getCorreo());
+                return false;
+            }
+            if (p.getNombreUsuario() != null && p.getNombreUsuario().equalsIgnoreCase(nuevaPersona.getNombreUsuario())) {
+                System.out.println(" Error: El nombre de usuario '" + nuevaPersona.getNombreUsuario() + "' ya está en uso.");
+                return false;
+            }
+            if (p.getCelular() == nuevaPersona.getCelular()) {
+                System.out.println(" Error: Ya existe una persona registrada con el número de celular: " + nuevaPersona.getCelular());
+                return false;
+            }
+        }
+        return true;
     }
-    
-    //Listar personas
-    public List<Persona2> listarPersonas(){
-        return personaDAO.listar(personas);
+
+    public List<Persona2> listarPersonas() {
+        return listaPersonas;
     }
-    
-    //Actualizar datos de una persona
-    public Persona2 actualizar(Persona2 persona){
-        return personaDAO.actualizar(personas, persona);
+
+    public Persona2 iniciarSesion(String usuario, String contraseña) {
+        for (Persona2 p : listaPersonas) {
+            if (p.iniciarSesion(usuario, contraseña)) {
+                return p;
+            }
+        }
+        return null;
     }
 }
 /**
