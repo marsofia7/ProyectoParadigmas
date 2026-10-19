@@ -18,8 +18,20 @@ public class Cliente extends Persona2 {
         super(idPersona, nombre, apellido, tipoDoc, numDoc, correo, contraseña, celular, NombreUsuario, rol);
     }
     
- public void pagar(){
- }
- public void recibirpedido(){
- }
+public void pagar(Pedido pedido, String formaPago) {
+        if (pedido != null) {
+            pedido.setFormaDePago(formaPago);
+            pedido.setEstado("Pagado");
+            System.out.println("El cliente " + getNombre() + " ha pagado el pedido de la mesa " + pedido.getNumeroMesa() + " con " + formaPago + ".");
+        }
+    }
+
+    public void recibirPedido(Pedido pedido) {
+        if (pedido != null) {
+            pedido.setEstado("Recibido");
+            System.out.println("El cliente " + getNombre() + " ha marcado el pedido de la mesa " + pedido.getNumeroMesa() + " como RECIBIDO.");
+        }
+    }
+    
+   
 }

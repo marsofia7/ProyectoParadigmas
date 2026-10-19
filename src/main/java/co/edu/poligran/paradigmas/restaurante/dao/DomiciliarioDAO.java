@@ -32,7 +32,7 @@ public class DomiciliarioDAO implements ICrudDAO<Domiciliario> {
         } else {
             for (Domiciliario c : lista) {
                 if (c.getIdPersona() == Domiciliario.getIdPersona()) {
-                    throw new IllegalArgumentException("Ya existe un mesero con el ID: " + Domiciliario.getIdPersona());
+                    throw new IllegalArgumentException("Ya existe un domiciliario con el ID: " + Domiciliario.getIdPersona());
                 }
             }
         }
