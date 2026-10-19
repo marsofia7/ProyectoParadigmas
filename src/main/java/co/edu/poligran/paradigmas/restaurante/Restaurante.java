@@ -13,51 +13,58 @@ import java.util.Scanner;
 
 public class Restaurante {
 
+    private static final Scanner scanner = new Scanner(System.in);
     private static final CristianManager cristianManager = new CristianManager();
     private static final AnaManager anaManager = new AnaManager();
-    private static final DaniloManager daniloManager = new DaniloManager();
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final DaniloManager daniloManager =
+        new DaniloManager(scanner, cristianManager.getProductos(), cristianManager.getPedidos());
 
     public static void main(String[] args) {
         System.out.println(Mensajes.BIENVENIDA);
 
-        // Control de acceso obligatorio previo
-        Persona2 usuarioActivo = autenticarORegistrar();
-        if (usuarioActivo == null) {
-            System.out.println(Mensajes.DESPEDIDA);
-            return;
-        }
+        // Ciclo externo para permitir cerrar sesión y volver a la pantalla de autenticación
+        boolean continuarSistema = true;
+        while (continuarSistema) {
+            // Control de acceso obligatorio previo: fuerza Iniciar Sesión o Registrar Persona
+            Persona2 usuarioActivo = autenticarORegistrar();
+            
+            if (usuarioActivo == null) {
+                // Si el usuario selecciona la opción 0 en el menú de login
+                System.out.println(Mensajes.DESPEDIDA);
+                continuarSistema = false;
+                break;
+            }
 
-        System.out.println("\n==========================================");
-        System.out.println(" ¡Acceso concedido! Bienvenid@, " + usuarioActivo.getNombre() + " [" + usuarioActivo.getRol() + "]");
-        System.out.println("==========================================");
+            System.out.println("\n==========================================");
+            System.out.println(" ¡Acceso concedido! Bienvenid@, " + usuarioActivo.getNombre() + " [" + usuarioActivo.getRol() + "]");
+            System.out.println("==========================================");
 
-        // Enrutamiento directo al menú correspondiente según el rol del usuario autenticado
-        String rol = usuarioActivo.getRol().toLowerCase();
-        
-        switch (rol) {
-            case "cliente":
-                menuCliente(usuarioActivo);
-                break;
-            case "mesero":
-                menuMesero(usuarioActivo);
-                break;
-            case "cocinero":
-                menuCocinero(usuarioActivo);
-                break;
-            case "domiciliario":
-                menuDomiciliario(usuarioActivo);
-                break;
-            case "administrador":
-                menuAdministrador(usuarioActivo);
-                break;
-            default:
-                // Menú general por defecto si el rol es genérico
-                menuGeneral(usuarioActivo);
-                break;
+            // Enrutamiento al menú correspondiente según el rol del usuario autenticado
+            String rol = usuarioActivo.getRol().toLowerCase();
+            
+            switch (rol) {
+                case "cliente":
+                    menuCliente(usuarioActivo);
+                    break;
+                case "mesero":
+                    menuMesero(usuarioActivo);
+                    break;
+                case "cocinero":
+                    menuCocinero(usuarioActivo);
+                    break;
+                case "domiciliario":
+                    menuDomiciliario(usuarioActivo);
+                    break;
+                case "administrador":
+                    menuAdministrador(usuarioActivo);
+                    break;
+                default:
+                    menuGeneral(usuarioActivo);
+                    break;
+            }
+            
+            System.out.println("\n Sesión cerrada correctamente. Volviendo al menú de autenticación...\n");
         }
-        
-        System.out.println("\n" + Mensajes.DESPEDIDA);
     }
 
     private static Persona2 autenticarORegistrar() {
@@ -65,7 +72,7 @@ public class Restaurante {
             System.out.println("\n--- ACCESO Y REGISTRO REQUERIDO ---");
             System.out.println("1. Iniciar Sesión");
             System.out.println("2. Registrar Persona");
-            System.out.println("0. Salir");
+            System.out.println("0. Salir completamente del sistema");
             System.out.print(Mensajes.SELECCIONE_OPCION);
             try {
                 int op = Integer.parseInt(scanner.nextLine());
@@ -76,7 +83,7 @@ public class Restaurante {
                     String c = scanner.nextLine();
                     Persona2 p = anaManager.iniciarSesion(u, c);
                     if (p != null) return p;
-                    System.out.println("❌ Credenciales incorrectas o el usuario no existe.");
+                    System.out.println(" Credenciales incorrectas o el usuario no existe.");
                 } else if (op == 2) {
                     String rol = capturarRol();
                     Persona2 nueva = capturarPersona(rol);
@@ -103,7 +110,7 @@ public class Restaurante {
             System.out.println("\n---------------- MENÚ CLIENTE ----------------");
             System.out.println(" 1. Ver Pedidos / Consultar Estado");
             System.out.println(" 2. Pagar Pedido");
-            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println(" 0. Cerrar Sesión");
             System.out.println("----------------------------------------------");
             System.out.print(Mensajes.SELECCIONE_OPCION);
             try {
@@ -129,32 +136,34 @@ public class Restaurante {
     }
 
     private static void menuMesero(Persona2 meseroUser) {
-        int op = -1;
-        do {
-            System.out.println("\n---------------- MENÚ MESERO -----------------");
-            System.out.println(" 1. Crear Pedido (con selección de productos y mesa)");
-            System.out.println(" 2. Listar Pedidos");
-            System.out.println(" 3. Marcar Pedido como Entregado");
-            System.out.println(" 4. Eliminar Pedido");
-            System.out.println(" 0. Salir / Cerrar Sesión");
-            System.out.println("----------------------------------------------");
-            System.out.print(Mensajes.SELECCIONE_OPCION);
-            try {
-                op = Integer.parseInt(scanner.nextLine());
-                if (op == 1) {
-                    daniloManager.crearPedido(cristianManager.listarProductos());
-                } else if (op == 2) {
-                    var peds = cristianManager.listarPedidos();
-                    if (peds.isEmpty()) System.out.println(Mensajes.SIN_PEDIDOS);
-                    else peds.forEach(System.out::println);
-                } else if (op == 3) {
-                    daniloManager.marcarEntregado();
-                } else if (op == 4) {
-                    daniloManager.eliminarPedido(cristianManager.listarPedidos());
-                }
-            } catch (Exception e) { System.out.println(Mensajes.NUMERO_INVALIDO); }
-        } while (op != 0);
-    }
+    int op = -1;
+    do {
+        System.out.println("\n---------------- MENÚ MESERO -----------------");
+        System.out.println(" 1. Crear Pedido (con selección de productos y mesa)");
+        System.out.println(" 2. Listar Pedidos");
+        System.out.println(" 3. Marcar Pedido como Entregado");
+        System.out.println(" 4. Eliminar Pedido");
+        System.out.println(" 0. Cerrar Sesión");
+        System.out.println("----------------------------------------------");
+        System.out.print(Mensajes.SELECCIONE_OPCION);
+        try {
+            op = Integer.parseInt(scanner.nextLine());
+            if (op == 1) {
+                daniloManager.crearPedido(daniloManager.getProductosPedido());
+            } else if (op == 2) {
+                var peds = daniloManager.getListaPedidos();
+                if (peds.isEmpty()) System.out.println(Mensajes.SIN_PEDIDOS);
+                else peds.forEach(System.out::println);
+            } else if (op == 3) {
+                daniloManager.marcarEntregado();
+            } else if (op == 4) {
+                daniloManager.eliminarPedido(daniloManager.getListaPedidos());
+            }
+        } catch (Exception e) {
+            System.out.println(Mensajes.NUMERO_INVALIDO);
+        }
+    } while (op != 0);
+}
 
     private static void menuCocinero(Persona2 cocineroUser) {
         int op = -1;
@@ -163,7 +172,7 @@ public class Restaurante {
             System.out.println("\n--------------- MENÚ COCINERO ----------------");
             System.out.println(" 1. Ver Pedidos en Curso");
             System.out.println(" 2. Cambiar Estado de Pedido (En Preparación / Listo)");
-            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println(" 0. Cerrar Sesión");
             System.out.println("----------------------------------------------");
             System.out.print(Mensajes.SELECCIONE_OPCION);
             try {
@@ -196,7 +205,7 @@ public class Restaurante {
             System.out.println("\n------------- MENÚ DOMICILIARIO --------------");
             System.out.println(" 1. Listar Pedidos Listos para Entrega");
             System.out.println(" 2. Marcar Pedido como Entregado");
-            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println(" 0. Cerrar Sesión");
             System.out.println("----------------------------------------------");
             System.out.print(Mensajes.SELECCIONE_OPCION);
             try {
@@ -220,7 +229,7 @@ public class Restaurante {
             System.out.println(" 2. Gestión de Mesas (Asignación y reasignación)");
             System.out.println(" 3. Gestión de Usuarios (Meseros, Admins, Cocineros, etc.)");
             System.out.println(" 4. Ver Tiempos y Estados de Pedidos");
-            System.out.println(" 0. Salir / Cerrar Sesión");
+            System.out.println(" 0. Cerrar Sesión");
             System.out.println("----------------------------------------------");
             System.out.print(Mensajes.SELECCIONE_OPCION);
             try {
@@ -239,7 +248,6 @@ public class Restaurante {
     }
 
     private static void menuGeneral(Persona2 usuario) {
-        // Menú genérico de respaldo si el rol no coincide exactamente
         int op = -1;
         do {
             System.out.println(Mensajes.MENU_PRINCIPAL);

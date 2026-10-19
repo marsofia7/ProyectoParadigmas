@@ -42,7 +42,13 @@ public class CristianManager {
     public List<Producto> listarProductos() {
         return productoDAO.listar(productos);
     }
+    public List<Producto> getProductos() {
+    return productos;
+    }
 
+    public List<Pedido> getPedidos() {
+    return pedidos;
+    }
     // ==========================================
     // GESTIÓN DE PEDIDOS
     // ==========================================
