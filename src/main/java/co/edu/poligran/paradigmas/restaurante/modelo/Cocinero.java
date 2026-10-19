@@ -42,10 +42,14 @@ public class Cocinero extends Persona2 {
      */
     public void estadoPedido(Pedido pedido, String nuevoEstado) {
         if (pedido != null) {
-            pedido.setEstado(nuevoEstado);
-            System.out.println("El cocinero " + getNombre() + " actualizó el pedido #" + pedido.getId() + " al estado: [" + nuevoEstado + "]");
-        } else {
-            System.out.println("No se pudo actualizar el estado, el pedido es nulo.");
+            String estLower = nuevoEstado.toLowerCase();
+            // Validamos contra los estados permitidos por cocina según el PDF
+            if (estLower.equals("en preparación") || estLower.equals("listo") || estLower.equals("cancelado")) {
+                pedido.setEstado(nuevoEstado);
+                System.out.println("El cocinero " + getNombre() + " actualizó el pedido #" + pedido.getId() + " a: [" + nuevoEstado + "]");
+            } else {
+                System.out.println("Estado no válido para cocina. Use: 'En preparación', 'Listo' o 'Cancelado'.");
+            }
         }
     }
 }

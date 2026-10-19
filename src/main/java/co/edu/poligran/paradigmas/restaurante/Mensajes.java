@@ -113,7 +113,25 @@ public final class Mensajes {
     public static final String PEDIR_ID = "ID: ";
     public static final String PEDIR_NOMBRE = "Nombre: ";
     public static final String PEDIR_APELLIDO = "Apellido: ";
-    public static final String PEDIR_TIPO_DOC = "Tipo de Documento: ";
+    
+    // Nuevo apartado de Rol numerado con las 5 funcionalidades/roles
+    public static final String PEDIR_ROL
+            = "Seleccione el rol de la persona:" + NL
+            + " 1. Cliente" + NL
+            + " 2. Administrador" + NL
+            + " 3. Mesero" + NL
+            + " 4. Cocinero" + NL
+            + " 5. Domiciliario" + NL
+            + "Seleccione una opción (1-5): ";
+
+    public static final String PEDIR_TIPO_DOC 
+            = "Tipo de Documento:" + NL
+            + " 1. Cédula de Ciudadanía (C.C.)" + NL
+            + " 2. NIT" + NL
+            + " 3. Tarjeta de Identidad (T.I.)" + NL
+            + " 4. Cédula de Extranjería (C.E.)" + NL
+            + "Seleccione una opción (1-4): ";
+            
     public static final String PEDIR_NUM_DOC = "Número de Documento: ";
     public static final String PEDIR_CORREO = "Correo electrónico: ";
     public static final String PEDIR_CONTRASENA = "Contraseña: ";
@@ -123,8 +141,21 @@ public final class Mensajes {
     // -------------------------------------------------------------- Pedido
     public static final String PEDIR_NUMERO_MESA = "Número de mesa: ";
     public static final String PEDIR_TOTAL = "Total: ";
-    public static final String PEDIR_ESTADO = "Estado del pedido: ";
-    public static final String PEDIR_FORMA_PAGO = "Forma de pago: ";
+    public static final String PEDIR_ESTADO 
+            = "Estado del pedido:" + NL
+            + " 1. PENDIENTE" + NL
+            + " 2. EN PREPARACIÓN" + NL
+            + " 3. LISTO" + NL
+            + " 4. ENTREGADO" + NL
+            + " 5. CANCELADO" + NL
+            + "Seleccione una opción (1-5): ";
+            
+    public static final String PEDIR_FORMA_PAGO 
+            = "Forma de pago:" + NL
+            + " 1. Efectivo" + NL
+            + " 2. Tarjeta" + NL
+            + "Seleccione una opción (1-2): ";
+            
     public static final String PEDIDO_CREADO = "Pedido creado exitosamente con ID: ";
     public static final String PEDIDO_ACTUALIZADO = "Pedido actualizado correctamente.";
     public static final String PEDIDO_ELIMINADO = "Pedido eliminado o cancelado correctamente.";
