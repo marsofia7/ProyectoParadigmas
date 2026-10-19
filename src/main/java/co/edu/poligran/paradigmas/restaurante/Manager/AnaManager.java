@@ -16,12 +16,12 @@ public class AnaManager {
      * Registra una nueva persona validando que sus datos únicos no estén duplicados.
      */
     public Persona2 registrarPersona(Persona2 nuevaPersona) {
-        // Validación previa antes de agregar a la lista
+  
         if (!validarPersonaUnica(nuevaPersona)) {
-            return null; // Retorna null si algún dato único ya existe
+            return null; 
         }
         
-        // Asignar ID autoincrementable si no lo tiene
+    
         if (nuevaPersona.getIdPersona() <= 0) {
             int maxId = 0;
             for (Persona2 p : listaPersonas) {

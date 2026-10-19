@@ -22,14 +22,14 @@ public class Restaurante {
     public static void main(String[] args) {
         System.out.println(Mensajes.BIENVENIDA);
 
-        // Ciclo externo para permitir cerrar sesión y volver a la pantalla de autenticación
+      
         boolean continuarSistema = true;
         while (continuarSistema) {
-            // Control de acceso obligatorio previo: fuerza Iniciar Sesión o Registrar Persona
+          
             Persona2 usuarioActivo = autenticarORegistrar();
             
             if (usuarioActivo == null) {
-                // Si el usuario selecciona la opción 0 en el menú de login
+            
                 System.out.println(Mensajes.DESPEDIDA);
                 continuarSistema = false;
                 break;
