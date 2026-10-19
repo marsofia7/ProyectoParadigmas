@@ -55,8 +55,7 @@ public class Producto  {
 
     @Override
     public String toString() {
-        return "Pedido{" + "idProducto=" + idProducto + ", precioProducto=" + precioProducto + ", nombresProducto=" + nombresProducto + ", descripcionProducto=" + descripcionProducto + '}';
+        // Corregido: decía "Pedido" y ahora dice "Producto"
+        return "Producto{" + "idProducto=" + idProducto + ", precioProducto=" + precioProducto + ", nombresProducto=" + nombresProducto + ", descripcionProducto=" + descripcionProducto + '}';
     }
-    
-    
 }
