@@ -40,7 +40,7 @@ public class DaniloManager {
         this.productosPedido=new ArrayList<>();
         this.pedidos=new ArrayList<>();
     }
-    
+   
     //Metodos Administrador/Mesero
     
     //Crear 
@@ -498,13 +498,31 @@ public class DaniloManager {
        
     }
     
-    
-    public List<Producto> crearProducto(List<Producto> productosRestaurante){
+    public void crearProducto(List<Producto> productosRestaurante){
+        System.out.print("Ingrese el Nombre del Producto:");
+        String nombre = tecla.nextLine();
+        System.out.print("Ingrese la Descripcion del Producto:");
+        String descripcion = tecla.nextLine();
+        long precio =0;
+        boolean control = false;
+        do {            
+            try {
+                System.out.print("Ingrese el Precio Del Producto del Producto:");
+                precio=tecla.nextLong();
+                if(precio<0) throw new IllegalArgumentException();
+            } 
+            catch (NumberFormatException e) {
+                System.out.print("\nSolo se aceptan Numeros.");
+            }
+            catch (IllegalArgumentException a){
+                System.out.print("\nNo se Aceptan Valores Negativos..");
+            }
+            
+        } while (!control);
         
-        Producto nuevo = new Producto();
+        Producto nuevo = new Producto()
         productosRestaurante.add(nuevo);
         
-        return Collections.unmodifiableList(productosRestaurante);
     }
     
     public void eliminarPedido(List<Pedido> lista){
@@ -547,6 +565,156 @@ public class DaniloManager {
         } while (!control);
     }
     
+    public void meseroManager(int rol, List<Producto> productosDisponibles){
+        int opcion =0;
+        boolean control =false;
+        do {
+            do {
+                try {
+                    System.out.print("\nOpciones De Mesero:"
+                        + "\n1. Registrar Mesero."
+                        + "\n2. Actualizar Mesero."
+                        + "\n3. Eliminar Mesero."
+                        + "\n4. Crear Pedido"
+                        + "\n5. Eliminar Pedido."
+                        + "\n6. Marcar Pedido Entregado"
+                        + "\n7. volver al menu anterior."
+                        + "\n\nSeleccione una Opcion: ");
+                    opcion = tecla.nextInt();
+                    control= true;
+                } catch (NumberFormatException e) {
+                    System.out.print("\nSolo se aceptan Numeros.");
+                } 
+            } while (!control);
+            
+            switch (opcion) {
+                case 1:
+                    registrar(rol);
+                    break;
+                    
+                case 2:
+                    Modificar(rol);
+                    break;
+                case 3:
+                    eliminar(rol);
+                    break;
+                case 4: 
+                    crearPedido(productosDisponibles);
+                    break;
+                case 5:
+                    eliminarPedido(pedidos);
+                    break;
+                case 6:
+                    marcarEntregado();
+                    break;
+                case 7:
+                    System.out.print("Regresando al menu anterior.");
+                    break;
+                default:
+                    System.out.print("Opcion Invalida.");
+                    break;
+            }
+        } while (opcion!=7);
+    }
     
+    public void administradorManager(int rol, List<Producto> productosDisponibles){
+        int opcion =0;
+        boolean control=false;
+        do {            
+            do {
+                try {
+                    System.out.print("Opciones de Administrador:"
+                        + "\n1. Gestion De Productos."
+                        + "\n2. Gestion De Mesas"
+                        + "\n3. Gestion De Usuarios."
+                        + "\n4. Ver Reportes."
+                        + "\n5. Ver Tiempos"
+                        + "\n6. Ver estados de pedido"
+                        + "\n7. Regresar al Menu anterior."
+                        + "\n\nSelecciones una Opcion: ");
+                } catch (NumberFormatException e) {
+                }
+                
+            } while (!control);
+            switch (opcion) {
+                case 1:
+                    
+                    break;
+                case 2:
+                    
+                    break;
+                case 3:
+                    
+                    break;
+                case 4:
+                    
+                    break;
+                case 5:
+                    
+                    break;
+                case 6:
+                    
+                    break;
+                case 7:
+                    
+                    break;
+                default:
+                    break;
+            }
+        } while (opcion!=7);
+    }
     
+    public void gestionProductos(List<Producto> productosDisponibles){
+        int opcion=0;
+        boolean control = false;
+        do{
+            do {                
+                try {
+                    System.out.print("Opciones de Gestion de Producto:"
+                            + "\n1. Crear Producto."
+                            + "\n2. Eliminar Producto."
+                            + "\n3. Modificar Producto"
+                            + "\n4. Volver al Menu Anterior."
+                            + "\n\nSeleccione una Opcion: ");
+                    opcion = tecla.nextInt();
+                    control =true;
+                } catch (NumberFormatException e) {
+                    System.out.print("\nSolo se aceptan Numeros.");
+                }
+            } while (!control);
+            switch (opcion) {
+                case 1:
+                    crearProducto(productosPedido); 
+                    break;
+                case 2:
+                    do {           
+                        try {
+                            System.out.print("Ingres el id del producto: ");
+                            int idProducto = tecla.nextInt();
+                            if(idProducto <0) throw new IllegalArgumentException();
+                            control = true;
+                            boolean eliminado= eliminarProducto(productosPedido, idProducto);
+                            if(eliminado)System.out.print("\nProducto Eliminado.");
+                            else System.out.print("\nProducto No Encontrado.");
+                               
+                        } 
+                        catch (NumberFormatException e) {
+                            System.out.print("\nSolo se admiten Numeros");
+                        }
+                        catch (IllegalArgumentException a){
+                            System.out.print("\nNo se admiten numeros negativos");
+                        }
+                    } while (!control); 
+                    break;
+                case 3:
+                        
+                    break;
+                case 4:
+                        System.out.print("\nRegresando al Menu anterior.");
+                    break;
+                default:
+                    break;
+                }
+        } while (opcion!=4);
+    }
 }

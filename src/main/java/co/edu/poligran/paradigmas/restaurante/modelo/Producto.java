@@ -14,7 +14,11 @@ public class Producto  {
     private String nombresProducto;
     private String descripcionProducto;
 
-    public Producto() {
+    public Producto(int idProducto, long precioProducto, String nombresProducto, String descripcionProducto) {
+        this.idProducto=idProducto;
+        this.precioProducto=precioProducto;
+        this.nombresProducto=nombresProducto;
+        this.descripcionProducto=descripcionProducto;
     }
 
     public int getIdProducto() {
