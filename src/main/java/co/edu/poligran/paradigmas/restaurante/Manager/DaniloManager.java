@@ -7,6 +7,7 @@ package co.edu.poligran.paradigmas.restaurante.Manager;
 import co.edu.poligran.paradigmas.restaurante.dao.AdministradorDAO;
 import co.edu.poligran.paradigmas.restaurante.dao.MeseroDAO;
 import co.edu.poligran.paradigmas.restaurante.dao.PedidoDAO;
+import co.edu.poligran.paradigmas.restaurante.dao.ProductoDAO;
 import co.edu.poligran.paradigmas.restaurante.modelo.Administrador;
 import co.edu.poligran.paradigmas.restaurante.modelo.Mesero;
 import co.edu.poligran.paradigmas.restaurante.modelo.Pedido;
@@ -33,6 +34,7 @@ public class DaniloManager {
     private MeseroDAO controlMesero;
     private AdministradorDAO controlAdministrador;
     private PedidoDAO controlPedido;
+    private ProductoDAO controlProducto;
 
     public DaniloManager() {
         this.meseros=new ArrayList<>();
@@ -520,7 +522,16 @@ public class DaniloManager {
             
         } while (!control);
         
-        Producto nuevo = new Producto()
+        Producto nuevo = new Producto(0, precio, nombre, descripcion);
+        if (nuevo.getIdProducto()<= 0) {
+            int maxId = 0;
+            for (Producto c : productosRestaurante) {
+                if (c.getIdProducto()> maxId) {
+                    maxId = c.getIdProducto();
+                }
+            }
+            nuevo.setIdProducto(maxId + 1);
+        }
         productosRestaurante.add(nuevo);
         
     }
@@ -555,6 +566,7 @@ public class DaniloManager {
                 if(idPedido <0) throw new IllegalArgumentException();
                 control = true;
                 controlPedido.buscarPorId(pedidos, idPedido).setEstado("entregado");
+                controlPedido.buscarPorId(pedidos, idPedido).setNumeroMesa(0);
             } 
             catch (NumberFormatException e) {
                 System.out.print("\nSolo se admiten Numeros");
@@ -628,8 +640,7 @@ public class DaniloManager {
                         + "\n2. Gestion De Mesas"
                         + "\n3. Gestion De Usuarios."
                         + "\n4. Ver Reportes."
-                        + "\n5. Ver Tiempos"
-                        + "\n6. Ver estados de pedido"
+                        + "\n5. Ver Tiempos y estados"
                         + "\n7. Regresar al Menu anterior."
                         + "\n\nSelecciones una Opcion: ");
                 } catch (NumberFormatException e) {
@@ -638,24 +649,21 @@ public class DaniloManager {
             } while (!control);
             switch (opcion) {
                 case 1:
-                    
+                    gestionProductos();
                     break;
                 case 2:
-                    
+                    gestionMesas();
                     break;
                 case 3:
-                    
+                    gestionUsuarios();
                     break;
                 case 4:
                     
                     break;
                 case 5:
-                    
+                    verTiempos();
                     break;
                 case 6:
-                    
-                    break;
-                case 7:
                     
                     break;
                 default:
@@ -664,7 +672,16 @@ public class DaniloManager {
         } while (opcion!=7);
     }
     
-    public void gestionProductos(List<Producto> productosDisponibles){
+    public void verTiempos(){
+        for(Pedido c: pedidos){
+            System.out.print("Id del Pedido: "+c.getId()
+                    +"\nMesa Asginada: "+c.getNumeroMesa()
+                    +"\nTiempo de inicio del pedido: "+c.getMarcadeTiempo()
+                    +"\nEstado: "+c.getEstado()+"\n\n");
+        }
+    }
+    
+    public void gestionProductos(){
         int opcion=0;
         boolean control = false;
         do{
@@ -707,7 +724,7 @@ public class DaniloManager {
                     } while (!control); 
                     break;
                 case 3:
-                        
+                    modificarProducto();
                     break;
                 case 4:
                         System.out.print("\nRegresando al Menu anterior.");
@@ -715,6 +732,217 @@ public class DaniloManager {
                 default:
                     break;
                 }
+        } while (opcion!=4);
+    }
+    
+    public void modificarProducto(){
+        boolean control = false;
+        int idProducto = 0;
+        Producto modificar;
+        
+        do {           
+            try {
+                System.out.print("Ingrese el id del producto que desea Modificar: ");
+                idProducto = tecla.nextInt();
+                if(idProducto <0) throw new IllegalArgumentException();
+                control = true;
+            } 
+            catch (NumberFormatException e) {
+                System.out.print("\nSolo se admiten Numeros");
+            }
+            catch (IllegalArgumentException a){
+                System.out.print("\nNo se admiten numeros negativos");
+            }
+        } while (!control);
+        control =false;
+        modificar= controlProducto.buscarPorId(productosPedido, idProducto);
+        if(modificar!=null){
+            int opcion =0;
+            do {
+                do {                
+                    try {
+                        System.out.print("Que desea Modificar?"
+                        + "\n1. Nombre."
+                        + "\n2. Descripcion."
+                        + "\n3. Precio."
+                        + "\n4. Regresar al Menu principal."
+                        + "\n\nSeleccione una Opcion: ");
+                        opcion = tecla.nextInt();
+                    } 
+                    catch (NumberFormatException e) {
+                        System.out.print("\nSolo se admiten Numeros");
+                    }
+                } while (!control);
+                control = false;
+                switch (opcion) {
+                    case 1:
+                        System.out.print("\nIngrese el nuevo nombre: ");
+                        String nombre = tecla.nextLine();
+                        modificar.setNombresProducto(nombre);
+                        break;
+                    case 2: 
+                        System.out.print("\nIngrese la nueva descripcion: ");
+                        String descripcion = tecla.nextLine();
+                        modificar.setDescripcionProducto(descripcion);
+                        break;
+                    case 3:
+                        do {           
+                            try {
+                                System.out.print("Ingrese el nuevo Precio: ");
+                                long precio = tecla.nextLong();
+                                if(precio<0) throw new IllegalArgumentException();
+                                control = true;
+                               modificar.setPrecioProducto(precio);
+                            } 
+                            catch (NumberFormatException e) {
+                                System.out.print("\nSolo se admiten Numeros");
+                            }
+                            catch (IllegalArgumentException a){
+                                System.out.print("\nNo se admiten numeros negativos");
+                            }
+                        } while (!control);
+                        control=false;
+                        break;
+                    case 4:
+                        System.out.print("\nRegresando al Menu Anterior.");
+                        break;
+                    default:
+                        System.out.print("\\nOpcion Invalida.");
+                        break;
+                }
+            } while (opcion != 4);
+        }
+    }
+    
+    public void gestionMesas(){
+        boolean control=false;
+        do {            
+            try {
+                System.out.print("Ingrese el id del pedido al que le quiere Modificar su Mesa: ");
+                int idPedido = tecla.nextInt();
+                if(idPedido<0) throw new IllegalArgumentException();
+                control=true;
+                Pedido modificar = controlPedido.buscarPorId(pedidos, idPedido);
+                if(modificar!=null){
+                    control =false;
+                    do {                        
+                        try {
+                            System.out.print("Ingrese el nuevo numero de mesa: ");
+                            int numMesa = tecla.nextInt();
+                            if(numMesa<0) throw new IllegalArgumentException();
+                            control = true;
+                            int repetir=0;
+                            for(Pedido c: pedidos){
+                                if(c.getNumeroMesa()==numMesa){
+                                    repetir++;
+                                }
+                            }
+                            if(repetir==0){
+                                modificar.setNumeroMesa(numMesa);
+                                System.out.print("\nMesa Modificada Correctamente.");
+                            }
+                            else System.out.print("\nEsta Mesa ya esta asignada.");
+                            
+                        } 
+                        catch (NumberFormatException e) {
+                            System.out.print("\nSolo se Aceptan Numeros");
+                        }
+                        catch (IllegalArgumentException a){
+                            System.out.print("\nNo se aceptan numeros Negativos");
+                        }
+                    } while (!control);
+                    
+                    
+                }
+            } 
+            catch (NumberFormatException e) {
+                System.out.print("\nSolo se Aceptan Numeros");
+            }
+            catch (IllegalArgumentException a){
+                System.out.print("\nNo se aceptan numeros Negativos");
+            }
+        } while (!control);
+    }
+    
+    public void gestionUsuarios(){
+        int opcion=0;
+        boolean control=false;
+        do {            
+            do {                
+                try {
+                    System.out.print("Que usuario Desea Gestionar?"
+                    + "\n1. Administradores."
+                    + "\n2. Meseros."
+                    + "\n3. Cocineros."
+                    + "\n4. Domiciliarios."
+                    + "\n5. Clientes"
+                    + "\n6. Regresar al menu anterior."
+                    + "\n\nSeleccione uns Opcion: ");
+                    opcion = tecla.nextInt();
+                    control =true;
+                } 
+                catch (NumberFormatException e) {
+                    System.out.print("\nSolo se Aceptan numeros.");
+                }
+            } while (!control);
+            switch (opcion) {
+                case 1:
+                    metodosUsuarios(2);
+                    break;
+                case 2:
+                    metodosUsuarios(1);
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                default:
+                    System.out.print("\nOpcion Invalida.");
+            }
+        } while (opcion!=6);
+    }
+    
+    public void metodosUsuarios(int rol){
+        int opcion =0;
+        boolean control = false;
+        String usuario="";
+        if(rol==1)usuario="Mesero";
+        if(rol==2)usuario="Administrador";
+        
+        do {            
+            do {                
+                try {
+                    System.out.print("Opciones de "+usuario+":"
+                            + "\n1. Crear."
+                            + "\n2. Eliminar."
+                            + "\n3. Modificar."
+                            + "\n4. Regresar al Menu anterior."
+                            + "\nSeleccione una Opcion: ");
+                    opcion = tecla.nextInt();
+                    control =true;
+                } catch (NumberFormatException e) {
+                    System.out.print("Solo se Aceptan Numeros");
+                }
+            } while (!control);
+            switch (opcion) {
+                case 1:
+                    registrar(rol);
+                    break;
+                case 2: 
+                    eliminar(rol);
+                    break;
+                case 3: 
+                    Modificar(rol);
+                    break;
+                case 4:
+                    System.out.print("\nRegresando al menu anterior.");
+                    break;
+                default:
+                    System.out.print("\nOpcion Invalida");
+                    break;
+            }
         } while (opcion!=4);
     }
 }
