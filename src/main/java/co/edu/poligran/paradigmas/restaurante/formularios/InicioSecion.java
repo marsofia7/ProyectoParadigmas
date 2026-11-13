@@ -8,8 +8,11 @@ import co.edu.poligran.paradigmas.restaurante.Restaurante;
 import co.edu.poligran.paradigmas.restaurante.RestauranteFormulario;
 import co.edu.poligran.paradigmas.restaurante.modelo.Persona2;
 import co.edu.poligran.paradigmas.restaurante.util.Validaciones;
-import co.edu.poligran.paradigmas.restaurante.vista.FormularioCocinero;
-import co.edu.poligran.paradigmas.restaurante.vista.FormularioCliente;
+import co.edu.poligran.paradigmas.restaurante.vista.VentanaAdministrador;
+import co.edu.poligran.paradigmas.restaurante.vista.VentanaCocinero;
+import co.edu.poligran.paradigmas.restaurante.vista.VentanaCliente;
+import co.edu.poligran.paradigmas.restaurante.vista.VentanaDomiciliario;
+import co.edu.poligran.paradigmas.restaurante.vista.VentanaMesero;
 import javax.swing.JOptionPane;
 
 /**
@@ -95,7 +98,6 @@ public class InicioSecion extends javax.swing.JFrame {
             }
         });
 
-        txtPassword.setText("jPasswordField1");
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPasswordActionPerformed(evt);
@@ -166,7 +168,7 @@ public class InicioSecion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-
+                                        
     // Capturar credenciales
     String usuarioIngresado = txtUsuario.getText().trim();
     String passwordIngresada = new String(txtPassword.getPassword()).trim();
@@ -178,26 +180,46 @@ public class InicioSecion extends javax.swing.JFrame {
     }
 
     // Verificar contra la lista compartida usando AnaManager
-Persona2 usuarioEncontrado = RestauranteFormulario.anaManager.iniciarSesion(usuarioIngresado, passwordIngresada);
+    Persona2 usuarioEncontrado = RestauranteFormulario.anaManager.iniciarSesion(usuarioIngresado, passwordIngresada);
 
     if (usuarioEncontrado != null) {
+        // Línea de depuración para ver el rol exacto en la consola
+        System.out.println("ROL DEVUELTO POR EL USUARIO: [" + usuarioEncontrado.getRol() + "]");
+
         JOptionPane.showMessageDialog(this, "¡Bienvenido, " + usuarioEncontrado.getNombre() + "!", "Acceso Concedido", JOptionPane.INFORMATION_MESSAGE);
         
-        // Direccionar según el rol almacenado
+        // Direccionar según el rol almacenado de forma segura con try-catch
         String rol = usuarioEncontrado.getRol();
-        if ("Cliente".equalsIgnoreCase(rol)) {
-            // Abrir interfaz de cliente
-        } else if ("Cocinero".equalsIgnoreCase(rol)) {
-            // Abrir interfaz de cocinero
+        if (rol != null) {
+            try {
+                if ("Cliente".equalsIgnoreCase(rol.trim())) {
+                    new VentanaCliente(usuarioEncontrado).setVisible(true);
+                } else if ("Cocinero".equalsIgnoreCase(rol.trim())) {
+                    new VentanaCocinero(usuarioEncontrado).setVisible(true);
+                } else if ("Domiciliario".equalsIgnoreCase(rol.trim())) {
+                    new VentanaDomiciliario(usuarioEncontrado).setVisible(true);
+                } else if ("Mesero".equalsIgnoreCase(rol.trim())) {
+                    new VentanaMesero(usuarioEncontrado).setVisible(true);
+                } else if ("Administrador".equalsIgnoreCase(rol.trim())) {
+                    new VentanaAdministrador(usuarioEncontrado).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Rol no reconocido: " + rol, "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return; // Si el rol no existe, detenemos el cierre del login
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al abrir la ventana del rol: " + e.getMessage(), "Error Crítico", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
-
-        this.dispose(); // Cierra el login
+        
+        this.dispose(); // Cierra el login solo si la ventana abrió con éxito
+        
     } else {
         JOptionPane.showMessageDialog(this, "Nombre de usuario o contraseña incorrectos.", "Error de Autenticación", JOptionPane.ERROR_MESSAGE);
         txtPassword.setText("");
         txtPassword.requestFocusInWindow();
     }
-
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRegistarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarUsuarioActionPerformed

@@ -5,20 +5,19 @@
 package co.edu.poligran.paradigmas.restaurante;
 
 import co.edu.poligran.paradigmas.restaurante.Manager.AnaManager;
-import co.edu.poligran.paradigmas.restaurante.formularios.InicioSecion;
 import co.edu.poligran.paradigmas.restaurante.Manager.CristianManager;
+import co.edu.poligran.paradigmas.restaurante.formularios.InicioSecion;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author CRISTIAN
- */
 public class RestauranteFormulario {
 
-public static CristianManager cristianManager = new CristianManager();
-public static AnaManager anaManager = new AnaManager(cristianManager.getPedidos());    
+    // 1. Declaramos y creamos los managers de forma pública y estática
+    public static CristianManager cristianManager = new CristianManager();
+    
+    // 2. Le pasamos la lista de pedidos de Cristian a Ana para que estén sincronizados
+    public static AnaManager anaManager = new AnaManager(cristianManager.getPedidos());
 
-public static void main(String[] args) {
+    public static void main(String[] args) {
         // Garantiza que la interfaz gráfica se ejecute de forma segura en el hilo de eventos de Swing
         SwingUtilities.invokeLater(new Runnable() {
             @Override
