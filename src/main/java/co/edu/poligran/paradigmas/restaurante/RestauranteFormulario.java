@@ -6,6 +6,7 @@ package co.edu.poligran.paradigmas.restaurante;
 
 import co.edu.poligran.paradigmas.restaurante.Manager.AnaManager;
 import co.edu.poligran.paradigmas.restaurante.formularios.InicioSecion;
+import co.edu.poligran.paradigmas.restaurante.Manager.CristianManager;
 import javax.swing.SwingUtilities;
 
 /**
@@ -14,8 +15,9 @@ import javax.swing.SwingUtilities;
  */
 public class RestauranteFormulario {
 
-    public static AnaManager anaManager = new AnaManager(); // Instancia global única
-    // ...
+public static CristianManager cristianManager = new CristianManager();
+public static AnaManager anaManager = new AnaManager(cristianManager.getPedidos());    
+
 public static void main(String[] args) {
         // Garantiza que la interfaz gráfica se ejecute de forma segura en el hilo de eventos de Swing
         SwingUtilities.invokeLater(new Runnable() {
