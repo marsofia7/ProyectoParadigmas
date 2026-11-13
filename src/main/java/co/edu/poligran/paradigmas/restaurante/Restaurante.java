@@ -15,7 +15,7 @@ public class Restaurante {
 
     private static final Scanner scanner = new Scanner(System.in);
     private static final CristianManager cristianManager = new CristianManager();
-    public static final AnaManager anaManager = new AnaManager();
+    public static final AnaManager anaManager = new AnaManager(cristianManager.getPedidos());
     private static final DaniloManager daniloManager =
         new DaniloManager(scanner, cristianManager.getProductos(), cristianManager.getPedidos());
 
