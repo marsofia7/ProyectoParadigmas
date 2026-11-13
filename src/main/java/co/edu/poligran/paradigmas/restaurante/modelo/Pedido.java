@@ -15,6 +15,7 @@ import java.util.List;
 public class Pedido {
     private int id;
     private int numeroMesa;
+    private int idCliente = -1;
     private long total;
     private String estado;
     private LocalDateTime marcadeTiempo;
@@ -38,6 +39,10 @@ public class Pedido {
         return productos;
     }
 
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+
     public int getId() {
         return id;
     }
@@ -46,6 +51,13 @@ public class Pedido {
         this.id = id;
     }
 
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
     public int getNumeroMesa() {
         return numeroMesa;
     }

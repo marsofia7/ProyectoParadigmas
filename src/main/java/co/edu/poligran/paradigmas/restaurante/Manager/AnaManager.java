@@ -171,6 +171,14 @@ public class AnaManager {
                 .collect(Collectors.toList());
     }
 
+    /**Pedidos que ya están asignados al domiciliario indicado. */
+    public List<Pedido> listarPedidosAsignados(int idDomiciliario) {
+        return pedidos.stream()
+                .filter(p -> asignaciones.get(p.getId()) != null
+                        && asignaciones.get(p.getId()) == idDomiciliario
+                        && !"ENTREGADO".equals(p.getEstado()))
+                .collect(Collectors.toList());
+    }
     /**Asignar un domiciliario a un pedido LISTO. */
     public void asignarDomiciliarioAPedido(int idDomiciliario, int idPedido) {
         obtenerDomiciliario(idDomiciliario);
@@ -287,6 +295,27 @@ public class AnaManager {
         pedidoDAO.actualizar(pedidos, p);
     }
 
+    /**Registra el pago y actualiza el estado del pedido. */
+    public void registrarPago(int idPedido, String formaDePago) {
+        Pedido pedido = obtenerPedido(idPedido);
+        if (pedido.getFormaDePago() != null && !pedido.getFormaDePago().trim().isEmpty()) {
+            throw new IllegalStateException("Este pedido ya tiene un pago registrado.");
+        }
+        cambiarFormaDePago(idPedido, formaDePago);
+        pedido.setMarcadeTiempo(LocalDateTime.now());
+        pedidoDAO.actualizar(pedidos, pedido);
+    }
+    /**Valida que el cliente autenticado sea dueño del pedido antes de cobrarlo. */
+    public void registrarPago(int idPedido, String formaDePago, int idCliente) {
+        Pedido pedido = obtenerPedido(idPedido);
+        if (pedido.getIdCliente() != idCliente) {
+            throw new IllegalStateException("No puedes pagar un pedido que pertenece a otro cliente.");
+        }
+        if (!"PENDIENTE".equalsIgnoreCase(pedido.getEstado())) {
+            throw new IllegalStateException("Solo se puede pagar un pedido pendiente.");
+        }
+        registrarPago(idPedido, formaDePago);
+    }
     /**Registra la marca de tiempo (momento actual) del pedido. */
     public LocalDateTime registrarMarcaDeTiempo(int idPedido) {
         Pedido p = obtenerPedido(idPedido);

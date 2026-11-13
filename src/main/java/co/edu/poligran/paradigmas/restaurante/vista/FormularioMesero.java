@@ -1,0 +1,30 @@
+package co.edu.poligran.paradigmas.restaurante.vista;
+
+import co.edu.poligran.paradigmas.restaurante.formularios.InicioSecion;
+import co.edu.poligran.paradigmas.restaurante.Manager.AnaManager;
+import co.edu.poligran.paradigmas.restaurante.Manager.CristianManager;
+import co.edu.poligran.paradigmas.restaurante.RestauranteFormulario;
+import co.edu.poligran.paradigmas.restaurante.modelo.Pedido;
+import co.edu.poligran.paradigmas.restaurante.modelo.Persona2;
+import co.edu.poligran.paradigmas.restaurante.modelo.Producto;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+/** Ventana JFrame exclusiva para meseros. */
+public class FormularioMesero extends JFrame {
+    private final CristianManager restaurante=RestauranteFormulario.cristianManager; private final AnaManager operaciones=RestauranteFormulario.anaManager;
+    private final DefaultTableModel productos=modelo("ID","Producto","Descripción","Precio"), pedidos=modelo("ID","Mesa","Estado","Total","Hora");private final JTable tablaProductos=new JTable(productos),tablaPedidos=new JTable(pedidos);
+    private final JTextField mesa=new JTextField(5);private final JComboBox<Producto> selector=new JComboBox<>();private final DefaultListModel<Producto> listaPedido=new DefaultListModel<>();private final JList<Producto> lista=new JList<>(listaPedido);private final Color acento=new Color(43,91,137);
+    public FormularioMesero(Persona2 usuario){setTitle("PoliRestaurante | Mesero");setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);setMinimumSize(new Dimension(900,620));setLocationRelativeTo(null);add(header(),BorderLayout.NORTH);add(contenido(),BorderLayout.CENTER);add(acciones(),BorderLayout.SOUTH);actualizar();}
+    private JPanel contenido(){JPanel root=new JPanel(new BorderLayout(8,8));root.setBorder(BorderFactory.createEmptyBorder(12,14,8,14));JPanel form=new JPanel(new FlowLayout(FlowLayout.LEFT));form.setBorder(BorderFactory.createTitledBorder("Crear pedido para una mesa"));form.add(new JLabel("Mesa:"));form.add(mesa);selector.setPreferredSize(new Dimension(250,26));form.add(new JLabel("Producto:"));form.add(selector);form.add(btn("Añadir producto",()->{if(selector.getSelectedItem()!=null)listaPedido.addElement((Producto)selector.getSelectedItem());}));lista.setVisibleRowCount(2);lista.setFixedCellWidth(240);form.add(new JScrollPane(lista));form.add(btn("Quitar",()->{int i=lista.getSelectedIndex();if(i>=0)listaPedido.remove(i);}));form.add(btn("Crear pedido",this::crearPedido));JTabbedPane tabs=new JTabbedPane();tabs.addTab("Productos",new JScrollPane(estilizar(tablaProductos)));tabs.addTab("Pedidos",new JScrollPane(estilizar(tablaPedidos)));root.add(form,BorderLayout.NORTH);root.add(tabs,BorderLayout.CENTER);return root;}
+    private JPanel acciones(){JPanel p=new JPanel();p.add(btn("Marcar entregado",this::entregar));p.add(btn("Eliminar pedido",this::eliminar));p.add(btn("Cambiar mesa",this::cambiarMesa));p.add(btn("Actualizar",this::actualizar));p.add(btn("Cerrar sesión",()->{dispose();new InicioSecion().setVisible(true);}));return p;}
+    private void crearPedido(){if(listaPedido.isEmpty()){mensaje("Agrega productos al pedido.");return;}try{int n=Integer.parseInt(mesa.getText().trim());if(n<=0)throw new NumberFormatException();Pedido pedido=restaurante.crearPedido(n,0);for(int i=0;i<listaPedido.size();i++)operaciones.agregarProductoAPedido(pedido.getId(),listaPedido.get(i));listaPedido.clear();mesa.setText("");actualizar();mensaje("Pedido #"+pedido.getId()+" creado.");}catch(NumberFormatException ex){mensaje("La mesa debe ser un número positivo.");}}
+    private int pedidoSeleccionado(){int f=tablaPedidos.getSelectedRow();return f<0?-1:((Number)pedidos.getValueAt(f,0)).intValue();}
+    private void entregar(){int id=pedidoSeleccionado();if(id<0){mensaje("Selecciona un pedido.");return;}Pedido p=restaurante.buscarPedidoPorId(id);if(p!=null&&"LISTO".equalsIgnoreCase(p.getEstado())){restaurante.actualizarEstadoPedido(id,"ENTREGADO");actualizar();}else mensaje("Solo se entregan pedidos listos.");}
+    private void eliminar(){int id=pedidoSeleccionado();if(id<0)return;if(JOptionPane.showConfirmDialog(this,"¿Eliminar pedido?","Confirmar",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){restaurante.eliminarPedido(id);actualizar();}}
+    private void cambiarMesa(){int id=pedidoSeleccionado();if(id<0){mensaje("Selecciona un pedido.");return;}Pedido p=restaurante.buscarPedidoPorId(id);String x=JOptionPane.showInputDialog(this,"Nueva mesa:",p.getNumeroMesa());if(x==null)return;try{int n=Integer.parseInt(x);if(n<1)throw new NumberFormatException();p.setNumeroMesa(n);actualizar();}catch(NumberFormatException ex){mensaje("Mesa inválida.");}}
+    private void actualizar(){productos.setRowCount(0);selector.removeAllItems();for(Producto p:restaurante.listarProductos()){productos.addRow(new Object[]{p.getIdProducto(),p.getNombresProducto(),p.getDescripcionProducto(),p.getPrecioProducto()});selector.addItem(p);}pedidos.setRowCount(0);for(Pedido p:restaurante.listarPedidos())pedidos.addRow(new Object[]{p.getId(),p.getNumeroMesa(),p.getEstado(),p.getTotal(),p.getMarcadeTiempo()});}
+    private JPanel header(){JPanel p=new JPanel(new GridLayout(0,1));p.setBackground(acento);p.setBorder(BorderFactory.createEmptyBorder(16,22,16,22));JLabel a=new JLabel("Panel del mesero");a.setFont(new Font("Segoe UI",Font.BOLD,24));a.setForeground(Color.WHITE);p.add(a);JLabel b=new JLabel("Registra pedidos, administra mesas y coordina entregas");b.setForeground(Color.WHITE);p.add(b);return p;}
+    private JButton btn(String s,Runnable r){JButton b=new JButton(s);b.setBackground(acento);b.setForeground(Color.WHITE);b.addActionListener(e->r.run());return b;}private JTable estilizar(JTable t){t.setRowHeight(28);t.getTableHeader().setBackground(acento);t.getTableHeader().setForeground(Color.WHITE);return t;}private void mensaje(String s){JOptionPane.showMessageDialog(this,s);}private static DefaultTableModel modelo(String... c){return new DefaultTableModel(c,0){public boolean isCellEditable(int r,int col){return false;}};}
+}

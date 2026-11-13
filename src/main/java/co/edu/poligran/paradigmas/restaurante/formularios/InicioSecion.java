@@ -62,7 +62,7 @@ public class InicioSecion extends javax.swing.JFrame {
         });
 
         btnIniciarSesion.setBackground(new java.awt.Color(122, 102, 82));
-        btnIniciarSesion.setText("Iniciar seción");
+        btnIniciarSesion.setText("Iniciar Sesión");
         btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIniciarSesionActionPerformed(evt);
@@ -73,7 +73,7 @@ public class InicioSecion extends javax.swing.JFrame {
 
         jLabel3.setBackground(new java.awt.Color(102, 51, 0));
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel3.setText("Inicio de seción");
+        jLabel3.setText("Inicio de Sesión");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -91,7 +91,7 @@ public class InicioSecion extends javax.swing.JFrame {
         );
 
         btnRegistarUsuario.setBackground(new java.awt.Color(122, 102, 82));
-        btnRegistarUsuario.setText("Registar usuario");
+        btnRegistarUsuario.setText("Registrar Usuario");
         btnRegistarUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistarUsuarioActionPerformed(evt);

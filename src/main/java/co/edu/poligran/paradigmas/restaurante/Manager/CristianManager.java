@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package co.edu.poligran.paradigmas.restaurante.Manager;
 
 import co.edu.poligran.paradigmas.restaurante.dao.*;
@@ -17,48 +13,65 @@ public class CristianManager {
     private final List<Producto> productos = new ArrayList<>();
     private final List<Cocinero> cocineros = new ArrayList<>();
     private final List<Domiciliario> domiciliarios = new ArrayList<>();
-    
+
     private final PedidoDAO pedidoDAO;
     private final ProductoDAO productoDAO;
     private final CocineroDAO cocineroDAO;
     private final DomiciliarioDAO domiciliarioDAO;
 
     public CristianManager() {
-        this.pedidoDAO = new PedidoDAO();
-        this.productoDAO = new ProductoDAO();
-        this.cocineroDAO = new CocineroDAO();
-        this.domiciliarioDAO = new DomiciliarioDAO();
+        pedidoDAO = new PedidoDAO();
+        productoDAO = new ProductoDAO();
+        cocineroDAO = new CocineroDAO();
+        domiciliarioDAO = new DomiciliarioDAO();
     }
 
-    // ==========================================
-    // GESTIÓN DE PRODUCTOS
-    // ==========================================
     public Producto registrarProducto(String nombre, long precio, String descripcion) {
-        // Usamos el constructor parametrizado que exige la clase Producto
-        Producto p = new Producto(0, precio, nombre, descripcion);
-        return productoDAO.crear(productos, p);
+        Producto producto = new Producto(0, precio, nombre, descripcion);
+        return productoDAO.crear(productos, producto);
+    }
+
+    public Producto buscarProductoPorId(int id) {
+        return productoDAO.buscarPorId(productos, id);
+    }
+
+    public Producto actualizarProducto(Producto producto) {
+        return productoDAO.actualizar(productos, producto);
+    }
+
+    public boolean eliminarProducto(int id) {
+        return productoDAO.eliminar(productos, id);
     }
 
     public List<Producto> listarProductos() {
         return productoDAO.listar(productos);
     }
+
     public List<Producto> getProductos() {
-    return productos;
+        return productos;
     }
 
     public List<Pedido> getPedidos() {
-    return pedidos;
+        return pedidos;
     }
-    // ==========================================
-    // GESTIÓN DE PEDIDOS
-    // ==========================================
+
     public Pedido crearPedido(int numeroMesa, long total) {
-        Pedido p = new Pedido();
-        p.setNumeroMesa(numeroMesa);
-        p.setTotal(total);
-        p.setEstado("PENDIENTE");
-        p.setMarcadeTiempo(LocalDateTime.now()); // Corregido a LocalDateTime
-        return pedidoDAO.crear(pedidos, p);
+        return crearPedido(numeroMesa, total, -1);
+    }
+
+    public Pedido crearPedido(int numeroMesa, long total, int idCliente) {
+        Pedido pedido = new Pedido();
+        pedido.setNumeroMesa(numeroMesa);
+        pedido.setIdCliente(idCliente);
+        pedido.setTotal(total);
+        pedido.setEstado("PENDIENTE");
+        pedido.setProductos(new ArrayList<>());
+        pedido.setMarcadeTiempo(LocalDateTime.now());
+        return pedidoDAO.crear(pedidos, pedido);
+    }
+
+    public boolean eliminarPedido(int id) {
+        return pedidos.removeIf(pedido -> pedido.getId() == id);
     }
 
     public List<Pedido> listarPedidos() {
@@ -70,19 +83,18 @@ public class CristianManager {
     }
 
     public boolean actualizarEstadoPedido(int idPedido, String nuevoEstado) {
-        Pedido p = pedidoDAO.buscarPorId(pedidos, idPedido);
-        if (p != null) {
-            p.setEstado(nuevoEstado);
-            p.setMarcadeTiempo(LocalDateTime.now()); // Corregido a LocalDateTime
-            pedidoDAO.actualizar(pedidos, p);
-            return true;
+        Pedido pedido = pedidoDAO.buscarPorId(pedidos, idPedido);
+
+        if (pedido == null) {
+            return false;
         }
-        return false;
+
+        pedido.setEstado(nuevoEstado);
+        pedido.setMarcadeTiempo(LocalDateTime.now());
+        pedidoDAO.actualizar(pedidos, pedido);
+        return true;
     }
 
-    // ==========================================
-    // GESTIÓN DE COCINEROS Y DOMICILIARIOS
-    // ==========================================
     public Cocinero registrarCocinero(Cocinero cocinero) {
         return cocineroDAO.crear(cocineros, cocinero);
     }
